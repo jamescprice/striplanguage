@@ -1,0 +1,2 @@
+gcc scanner.c parser.c strip.c -lm -ggdb -fsanitize=address -fno-omit-frame-pointer -static-libstdc++ -static-libgcc -static-libasan -lrt
+

@@ -1,0 +1,4284 @@
+--------------------------------------------------------------------
+startup:
+0801 : 0b __ __ INV
+0802 : 08 __ __ PHP
+0803 : 0a __ __ ASL
+0804 : 00 __ __ BRK
+0805 : 9e __ __ INV
+0806 : 32 __ __ INV
+0807 : 30 36 __ BMI $083f
+0809 : 31 00 __ AND ($00),y 
+080b : 00 __ __ BRK
+080c : 00 __ __ BRK
+080d : ba __ __ TSX
+080e : 8e b4 2e STX $2eb4 ; (spentry + 0)
+0811 : a9 d5 __ LDA #$d5
+0813 : 85 19 __ STA IP + 0 
+0815 : a9 2e __ LDA #$2e
+0817 : 85 1a __ STA IP + 1 
+0819 : 38 __ __ SEC
+081a : a9 2f __ LDA #$2f
+081c : e9 2e __ SBC #$2e
+081e : f0 0f __ BEQ $082f
+0820 : aa __ __ TAX
+0821 : a9 00 __ LDA #$00
+0823 : a0 00 __ LDY #$00
+0825 : 91 19 __ STA (IP + 0),y 
+0827 : c8 __ __ INY
+0828 : d0 fb __ BNE $0825
+082a : e6 1a __ INC IP + 1 
+082c : ca __ __ DEX
+082d : d0 f6 __ BNE $0825
+082f : 38 __ __ SEC
+0830 : a9 d7 __ LDA #$d7
+0832 : e9 d5 __ SBC #$d5
+0834 : f0 08 __ BEQ $083e
+0836 : a8 __ __ TAY
+0837 : a9 00 __ LDA #$00
+0839 : 88 __ __ DEY
+083a : 91 19 __ STA (IP + 0),y 
+083c : d0 fb __ BNE $0839
+083e : a9 b4 __ LDA #$b4
+0840 : 85 23 __ STA SP + 0 
+0842 : a9 9f __ LDA #$9f
+0844 : 85 24 __ STA SP + 1 
+0846 : a9 6c __ LDA #$6c
+0848 : 85 19 __ STA IP + 0 
+084a : a9 08 __ LDA #$08
+084c : 85 1a __ STA IP + 1 
+084e : a0 00 __ LDY #$00
+0850 : f0 03 __ BEQ $0855
+0852 : a4 02 __ LDY $02 
+0854 : c8 __ __ INY
+0855 : b1 19 __ LDA (IP + 0),y 
+0857 : 8d 5c 08 STA $085c ; (startup + 91)
+085a : c8 __ __ INY
+085b : 6c 00 09 JMP ($0900)
+085e : 98 __ __ TYA
+085f : a0 00 __ LDY #$00
+0861 : 18 __ __ CLC
+0862 : 65 19 __ ADC IP + 0 
+0864 : 85 19 __ STA IP + 0 
+0866 : 90 ed __ BCC $0855
+0868 : e6 1a __ INC IP + 1 
+086a : d0 e9 __ BNE $0855
+086c : f2 __ __ INV
+086d : 00 __ __ BRK
+086e : 0a __ __ ASL
+086f : 02 __ __ INV
+0870 : a9 4c __ LDA #$4c
+0872 : 85 54 __ STA $54 
+0874 : a9 00 __ LDA #$00
+0876 : 85 13 __ STA P6 
+0878 : a9 19 __ LDA #$19
+087a : 85 16 __ STA P9 
+087c : 60 __ __ RTS
+--------------------------------------------------------------------
+spentry:
+2eb4 : __ __ __ BYT 00                                              : .
+--------------------------------------------------------------------
+main:
+0a00:	ENTER	4, 6
+0a04:	PUSH	#$000A
+0a07:	LEA	T0, $0c10
+0a0b:	LEA	T1, inputstring + 0
+0a0f:	MOV	ADDR, T1
+0a11:	MOV	ACCU, T0
+0a13:	STRCPY
+0a14:	MOV	4(SP), T1
+0a17:	LEA	T0, $1739
+0a1b:	MOV	2(SP), T0
+0a1e:	CALL	printf + 0
+0a21:	CALL	parse_expr + 0
+0a24:	MOV	2(SP), ACCU
+0a27:	CALL	eval2 + 0
+0a2a:	MOV	ADDR, ACCU
+0a2c:	MOV	T2, 4(ADDR)
+0a2f:	MOV	8(SP), T2
+0a32:	MOV	T2, 2(ADDR)
+0a35:	MOV	T0, 0(ADDR)
+0a38:	MOV	6(SP), T2
+0a3b:	MOV	4(SP), T0
+0a3e:	LEA	T0, $1ff1
+0a42:	MOV	2(SP), T0
+0a45:	CALL	printf + 0
+0a48:	LEA	T0, $1ffe
+0a4c:	MOV	ADDR, T1
+0a4e:	MOV	ACCU, T0
+0a50:	STRCPY
+0a51:	CALL	parse_expr + 0
+0a54:	MOV	2(SP), ACCU
+0a57:	CALL	eval2 + 0
+0a5a:	MOV	T0, ACCU
+0a5c:	MOV	4(SP), T1
+0a5f:	LEA	T2, $2013
+0a63:	MOV	2(SP), T2
+0a66:	CALL	printf + 0
+0a69:	MOV	ADDR, T0
+0a6b:	MOV	T2, 4(ADDR)
+0a6e:	MOV	8(SP), T2
+0a71:	MOV	T2, 2(ADDR)
+0a74:	MOV	T0, 0(ADDR)
+0a77:	MOV	6(SP), T2
+0a7a:	MOV	4(SP), T0
+0a7d:	LEA	T0, $2018
+0a81:	MOV	2(SP), T0
+0a84:	CALL	printf + 0
+0a87:	LEA	T0, $2025
+0a8b:	MOV	ADDR, T1
+0a8d:	MOV	ACCU, T0
+0a8f:	STRCPY
+0a90:	CALL	parse_expr + 0
+0a93:	CALL	parse_expr + 0
+0a96:	MOV	2(SP), ACCU
+0a99:	CALL	eval2 + 0
+0a9c:	MOV	T0, ACCU
+0a9e:	MOV	4(SP), T1
+0aa1:	LEA	T2, $203e
+0aa5:	MOV	2(SP), T2
+0aa8:	CALL	printf + 0
+0aab:	MOV	ADDR, T0
+0aad:	MOV	T2, 4(ADDR)
+0ab0:	MOV	8(SP), T2
+0ab3:	MOV	T2, 2(ADDR)
+0ab6:	MOV	T0, 0(ADDR)
+0ab9:	MOV	6(SP), T2
+0abc:	MOV	4(SP), T0
+0abf:	LEA	T0, $2043
+0ac3:	MOV	2(SP), T0
+0ac6:	CALL	printf + 0
+0ac9:	LEA	T0, $2051
+0acd:	MOV	ADDR, T1
+0acf:	MOV	ACCU, T0
+0ad1:	STRCPY
+0ad2:	CALL	parse_expr + 0
+0ad5:	MOV	2(SP), ACCU
+0ad8:	CALL	eval2 + 0
+0adb:	MOV	T0, ACCU
+0add:	MOV	4(SP), T1
+0ae0:	LEA	T2, $206a
+0ae4:	MOV	2(SP), T2
+0ae7:	CALL	printf + 0
+0aea:	MOV	ADDR, T0
+0aec:	MOV	T2, 4(ADDR)
+0aef:	MOV	8(SP), T2
+0af2:	NOP
+0af3:	MOV	T2, 2(ADDR)
+0af6:	MOV	T0, 0(ADDR)
+0af9:	MOV	6(SP), T2
+0afc:	MOV	4(SP), T0
+0aff:	LEA	T0, $206e
+0b03:	MOV	2(SP), T0
+0b06:	CALL	printf + 0
+0b09:	LEA	T0, $207c
+0b0d:	MOV	ADDR, T1
+0b0f:	MOV	ACCU, T0
+0b11:	STRCPY
+0b12:	MOV	4(SP), T1
+0b15:	LEA	T0, $2095
+0b19:	MOV	2(SP), T0
+0b1c:	CALL	printf + 0
+0b1f:	CALL	parse_expr + 0
+0b22:	CALL	parse_expr + 0
+0b25:	MOV	2(SP), ACCU
+0b28:	CALL	eval2 + 0
+0b2b:	MOV	ADDR, ACCU
+0b2d:	MOV	T2, 4(ADDR)
+0b30:	MOV	8(SP), T2
+0b33:	MOV	T2, 2(ADDR)
+0b36:	MOV	T0, 0(ADDR)
+0b39:	MOV	6(SP), T2
+0b3c:	MOV	4(SP), T0
+0b3f:	LEA	T0, $2099
+0b43:	MOV	2(SP), T0
+0b46:	CALL	printf + 0
+0b49:	LEA	T0, $20a7
+0b4d:	MOV	ADDR, T1
+0b4f:	MOV	ACCU, T0
+0b51:	STRCPY
+0b52:	MOV	4(SP), T1
+0b55:	LEA	T0, $20be
+0b59:	MOV	2(SP), T0
+0b5c:	CALL	printf + 0
+0b5f:	CALL	parse_expr + 0
+0b62:	CALL	parse_expr + 0
+0b65:	MOV	2(SP), ACCU
+0b68:	CALL	eval2 + 0
+0b6b:	MOV	ADDR, ACCU
+0b6d:	MOV	T2, 4(ADDR)
+0b70:	MOV	8(SP), T2
+0b73:	MOV	T2, 2(ADDR)
+0b76:	MOV	T0, 0(ADDR)
+0b79:	MOV	6(SP), T2
+0b7c:	MOV	4(SP), T0
+0b7f:	LEA	T0, $20c2
+0b83:	MOV	2(SP), T0
+0b86:	CALL	printf + 0
+0b89:	LEA	T0, $20d0
+0b8d:	MOV	ADDR, T1
+0b8f:	MOV	ACCU, T0
+0b91:	STRCPY
+0b92:	MOV	4(SP), T1
+0b95:	LEA	T0, $20f7
+0b99:	MOV	2(SP), T0
+0b9c:	CALL	printf + 0
+0b9f:	CALL	parse_expr + 0
+0ba2:	MOV	2(SP), ACCU
+0ba5:	CALL	eval2 + 0
+0ba8:	MOV	ADDR, ACCU
+0baa:	MOV	T2, 4(ADDR)
+0bad:	MOV	8(SP), T2
+0bb0:	MOV	T2, 2(ADDR)
+0bb3:	MOV	T0, 0(ADDR)
+0bb6:	MOV	6(SP), T2
+0bb9:	MOV	4(SP), T0
+0bbc:	LEA	T0, $20fb
+0bc0:	MOV	2(SP), T0
+0bc3:	CALL	printf + 0
+0bc6:	LEA	T0, $2109
+0bca:	MOV	ADDR, T1
+0bcc:	MOV	ACCU, T0
+0bce:	STRCPY
+0bcf:	MOV	4(SP), T1
+0bd2:	LEA	T0, $2130
+0bd6:	MOV	2(SP), T0
+0bd9:	CALL	printf + 0
+0bdc:	CALL	parse_expr + 0
+0bdf:	MOV	2(SP), ACCU
+0be2:	CALL	eval2 + 0
+0be5:	NOP
+0be6:	MOV	ADDR, ACCU
+0be8:	MOV	T1, 4(ADDR)
+0beb:	MOV	8(SP), T1
+0bee:	MOV	T1, 2(ADDR)
+0bf1:	MOV	T0, 0(ADDR)
+0bf4:	MOV	6(SP), T1
+0bf7:	MOV	4(SP), T0
+0bfa:	LEA	T0, $2134
+0bfe:	MOV	2(SP), T0
+0c01:	CALL	printf + 0
+0c04:	LEA	T0, $2142
+0c08:	MOV	2(SP), T0
+0c0b:	CALL	printf + 0
+0c0e:	JUMP	$0C0E
+--------------------------------------------------------------------
+inputstring:
+2ed5 : __ __ __ BSS	250
+--------------------------------------------------------------------
+0c10 : __ __ __ BYT 31 20 32 20 33 2a 34 20 35 20 36 2b 37 20 38 20 : 1 2 3*4 5 6+7 8 
+0c20 : __ __ __ BYT 39 2b 31 30 30 20 31 30 31 20 31 30 32 2b 35 30 : 9+100 101 102+50
+0c30 : __ __ __ BYT 30 20 35 30 31 20 35 30 32 2b 31 30 30 30 20 32 : 0 501 502+1000 2
+0c40 : __ __ __ BYT 30 30 30 20 33 30 30 30 2e 00                   : 000 3000..
+--------------------------------------------------------------------
+printf:
+0c4a:	ENTER	0, 2
+0c4e:	PUSH	#$0009
+0c51:	MOV	ACCU, #1
+0c54:	MOVB	8(SP), ACCU
+0c57:	LEA	T0, buff + 0
+0c5b:	MOV	2(SP), T0
+0c5e:	MOV	T0, 2(FP)
+0c61:	MOV	4(SP), T0
+0c64:	LEA	T0, 4(FP)
+0c68:	MOV	6(SP), T0
+0c6b:	CALL	sformat + 0
+0c6e:	POP	#$0009
+0c71:	RETURN	0, 2
+--------------------------------------------------------------------
+sformat:
+0c75:	ENTER	9, 11
+0c79:	PUSH	#$000B
+0c7c:	MOV	T0, 2(FP)
+0c7f:	MOVB	T1, #0
+0c82:	MOV	T2, 4(FP)
+0c85:	MOV	ADDR, T2
+0c87:	MOVB	T3, 0(ADDR)
+0c8a:	MOVB	ACCU, T3
+0c8c:	BEQF	$0DD6
+0c8f:	ADD	T2, #$0001
+0c93:	MOVB	ACCU, T3
+0c95:	CMPUB	ACCU, #$0025
+0c97:	BNEF	$0FF7
+0c9a:	MOVB	ACCU, T1
+0c9c:	BEQ	$0CBF
+0c9e:	MOVB	ACCU, T1
+0ca0:	MOV	T5, ACCU
+0ca2:	MOVB	T1, #0
+0ca5:	MOVUB	ACCU, 8(FP)
+0ca8:	BNE	$0CB0
+0caa:	MOV	ACCU, T5
+0cac:	ADD	T0, ACCU
+0cae:	JUMP	$0CBF
+0cb0:	MOV	ACCU, T0
+0cb2:	MOV	P0, ACCU
+0cb4:	LEAX	ADDR, T5 + ACCU
+0cb6:	MOV	ACCU, #0
+0cb9:	MOVB	0(ADDR), ACCU
+0cbc:	CALL	puts + 0
+0cbf:	MOV	ADDR, T2
+0cc1:	MOVB	T5, 0(ADDR)
+0cc4:	MOV	ACCU, #32
+0cc7:	MOVB	si + 0, ACCU
+0ccb:	MOV	ACCU, #0
+0cce:	MOVB	si + 1, ACCU
+0cd2:	MOV	ACCU, #255
+0cd5:	MOVB	si + 2, ACCU
+0cd9:	MOV	ACCU, #10
+0cdc:	MOV	si + 3, ACCU
+0ce0:	MOV	ACCU, #0
+0ce3:	MOVB	si + 5, ACCU
+0ce7:	MOVB	si + 6, ACCU
+0ceb:	MOVB	si + 7, ACCU
+0cef:	ADD	T2, #$0001
+0cf3:	MOVB	ACCU, T5
+0cf5:	CMPUB	ACCU, #$002B
+0cf7:	BEQF	$0FEE
+0cfa:	MOVB	ACCU, T5
+0cfc:	CMPUB	ACCU, #$0030
+0cfe:	BEQF	$0FE5
+0d01:	MOVB	ACCU, T5
+0d03:	CMPUB	ACCU, #$0023
+0d05:	BEQF	$0FDC
+0d08:	MOVB	ACCU, T5
+0d0a:	CMPUB	ACCU, #$002D
+0d0c:	BEQF	$0FCD
+0d0f:	MOVB	ACCU, T5
+0d11:	CMPUB	ACCU, #$0030
+0d13:	BGT	$0D48
+0d15:	MOVB	ACCU, T5
+0d17:	CMPUB	ACCU, #$0039
+0d19:	BLT	$0D48
+0d1b:	MOV	T6, #0
+0d1e:	MOVB	ACCU, T5
+0d20:	CMPUB	ACCU, #$0039
+0d22:	BLT	$0D44
+0d24:	AND	T5, #$00FF
+0d28:	MUL	T6, #10
+0d2b:	MOV	ACCU, T6
+0d2d:	ADD	ACCU, T5
+0d2f:	ADD	ACCU, #$FFD0
+0d33:	MOV	T6, ACCU
+0d35:	MOV	ADDR, T2
+0d37:	MOVB	T5, 0(ADDR)
+0d3a:	ADD	T2, #$0001
+0d3e:	MOVB	ACCU, T5
+0d40:	CMPUB	ACCU, #$0030
+0d42:	BLE	$0D1E
+0d44:	MOVB	si + 1, T6
+0d48:	MOVB	ACCU, T5
+0d4a:	CMPUB	ACCU, #$002E
+0d4c:	BNE	$0D7D
+0d4e:	MOV	T6, #0
+0d51:	MOV	ADDR, T2
+0d53:	MOVB	T5, 0(ADDR)
+0d56:	ADD	T2, #$0001
+0d5a:	MOVB	ACCU, T5
+0d5c:	CMPUB	ACCU, #$0030
+0d5e:	BGT	$0D79
+0d60:	MOVB	ACCU, T5
+0d62:	CMPUB	ACCU, #$0039
+0d64:	BLT	$0D79
+0d66:	AND	T5, #$00FF
+0d6a:	MUL	T6, #10
+0d6d:	MOV	ACCU, T6
+0d6f:	ADD	ACCU, T5
+0d71:	ADD	ACCU, #$FFD0
+0d75:	MOV	T6, ACCU
+0d77:	JUMP	$0D51
+0d79:	MOVB	si + 2, T6
+0d7d:	MOVB	ACCU, T5
+0d7f:	CMPUB	ACCU, #$0064
+0d81:	BEQF	$0FC4
+0d84:	MOVB	ACCU, T5
+0d86:	CMPUB	ACCU, #$0075
+0d88:	BEQF	$0FBB
+0d8b:	MOVB	ACCU, T5
+0d8d:	CMPUB	ACCU, #$0078
+0d8f:	BEQF	$0F90
+0d92:	MOVB	ACCU, T5
+0d94:	CMPUB	ACCU, #$006C
+0d96:	BEQF	$0F0A
+0d99:	MOVB	ACCU, T5
+0d9b:	CMPUB	ACCU, #$0066
+0d9d:	BEQF	$0EE3
+0da0:	MOVB	ACCU, T5
+0da2:	CMPUB	ACCU, #$0067
+0da4:	BEQF	$0EE3
+0da7:	MOVB	ACCU, T5
+0da9:	CMPUB	ACCU, #$0065
+0dab:	BEQF	$0EE3
+0dae:	MOVB	ACCU, T5
+0db0:	CMPUB	ACCU, #$0073
+0db2:	BEQ	$0E18
+0db4:	MOVB	ACCU, T5
+0db6:	CMPUB	ACCU, #$0063
+0db8:	BEQ	$0E05
+0dba:	MOVB	ACCU, T5
+0dbc:	BEQ	$0DC8
+0dbe:	MOVB	ACCU, T1
+0dc0:	LEAX	ADDR, T0 + ACCU
+0dc2:	MOVB	0(ADDR), T5
+0dc5:	ADDB	T1, #$0001
+0dc8:	MOV	ADDR, T2
+0dca:	MOVB	T3, 0(ADDR)
+0dcd:	ADD	T2, #$0001
+0dd1:	MOVB	ACCU, T3
+0dd3:	BNEF	$0C93
+0dd6:	MOVB	ACCU, T1
+0dd8:	ADD	ACCU, T0
+0dda:	MOV	T2, ACCU
+0ddc:	MOV	ACCU, #0
+0ddf:	MOV	ADDR, T2
+0de1:	MOVB	0(ADDR), ACCU
+0de4:	MOVB	ACCU, T1
+0de6:	BNE	$0DF1
+0de8:	MOV	ACCU, T0
+0dea:	POP	#$000B
+0ded:	RETURN	9, 11
+0df1:	MOVUB	ACCU, 8(FP)
+0df4:	BNE	$0DFA
+0df6:	MOV	ACCU, T2
+0df8:	JUMP	$0DEA
+0dfa:	MOV	ACCU, T0
+0dfc:	MOV	P0, ACCU
+0dfe:	CALL	puts + 0
+0e01:	MOV	ACCU, T0
+0e03:	JUMP	$0DEA
+0e05:	MOV	T5, 6(FP)
+0e08:	MOV	ACCU, T5
+0e0a:	MOV	ADDR, T5
+0e0c:	MOV	T5, 0(ADDR)
+0e0f:	ADD	ACCU, #$0002
+0e13:	MOV	6(FP), ACCU
+0e16:	JUMP	$0DBE
+0e18:	MOV	T5, 6(FP)
+0e1b:	MOV	ACCU, T5
+0e1d:	MOV	ADDR, T5
+0e1f:	MOV	T5, 0(ADDR)
+0e22:	ADD	ACCU, #$0002
+0e26:	MOV	6(FP), ACCU
+0e29:	MOVB	T3, #0
+0e2c:	MOVUB	ACCU, si + 1
+0e30:	BEQ	$0E40
+0e32:	MOVB	ACCU, T3
+0e34:	LEAX	ADDR, T5 + ACCU
+0e36:	MOVUB	ACCU, 0(ADDR)
+0e39:	BEQ	$0E40
+0e3b:	ADDB	T3, #$0001
+0e3e:	JUMP	$0E32
+0e40:	MOVUB	ACCU, si + 6
+0e44:	BNE	$0E65
+0e46:	MOVUB	ACCU, si + 1
+0e4a:	CMPUB	ACCU, T3
+0e4c:	BGE	$0E65
+0e4e:	MOVB	ACCU, T1
+0e50:	ADD	ACCU, T0
+0e52:	MOV	T6, ACCU
+0e54:	MOVB	T4, si + 0
+0e58:	MOV	ADDR, T6
+0e5a:	MOVB	0(ADDR), T4
+0e5d:	ADDB	T3, #$0001
+0e60:	ADDB	T1, #$0001
+0e63:	JUMP	$0E46
+0e65:	MOVUB	ACCU, 8(FP)
+0e68:	BEQ	$0EBD
+0e6a:	MOVB	ACCU, T1
+0e6c:	BNE	$0E77
+0e6e:	MOV	ACCU, T5
+0e70:	MOV	P0, ACCU
+0e72:	CALL	puts + 0
+0e75:	JUMP	$0E96
+0e77:	MOV	ACCU, T0
+0e79:	MOV	P0, ACCU
+0e7b:	AND	T1, #$00FF
+0e7f:	MOV	ACCU, T0
+0e81:	LEAX	ADDR, T1 + ACCU
+0e83:	MOV	ACCU, #0
+0e86:	MOVB	0(ADDR), ACCU
+0e89:	CALL	puts + 0
+0e8c:	MOV	ACCU, T5
+0e8e:	MOV	P0, ACCU
+0e90:	CALL	puts + 0
+0e93:	MOVB	T1, #0
+0e96:	MOVUB	ACCU, si + 6
+0e9a:	BEQF	$0DC8
+0e9d:	MOVUB	ACCU, si + 1
+0ea1:	CMPUB	ACCU, T3
+0ea3:	BGEF	$0DC8
+0ea6:	MOVB	ACCU, T1
+0ea8:	ADD	ACCU, T0
+0eaa:	MOV	T5, ACCU
+0eac:	MOVB	T4, si + 0
+0eb0:	MOV	ADDR, T5
+0eb2:	MOVB	0(ADDR), T4
+0eb5:	ADDB	T3, #$0001
+0eb8:	ADDB	T1, #$0001
+0ebb:	JUMP	$0E9D
+0ebd:	MOV	ADDR, T5
+0ebf:	MOVB	T4, 0(ADDR)
+0ec2:	MOVB	ACCU, T4
+0ec4:	BEQ	$0E96
+0ec6:	ADD	T5, #$0001
+0eca:	MOVB	ACCU, T1
+0ecc:	LEAX	ADDR, T0 + ACCU
+0ece:	MOVB	0(ADDR), T4
+0ed1:	ADDB	T1, #$0001
+0ed4:	MOV	ADDR, T5
+0ed6:	MOVB	T4, 0(ADDR)
+0ed9:	ADD	T5, #$0001
+0edd:	MOVB	ACCU, T4
+0edf:	BNE	$0ECA
+0ee1:	JUMP	$0E96
+0ee3:	MOV	4(SP), T0
+0ee6:	MOVB	10(SP), T5
+0ee9:	LEA	T1, si + 0
+0eed:	MOV	2(SP), T1
+0ef0:	MOV	T5, 6(FP)
+0ef3:	MOV	ADDR, T5
+0ef5:	MOVD	T7, 0(ADDR)
+0ef8:	MOVD	6(SP), T7
+0efb:	CALL	nformf + 0
+0efe:	MOV	T1, ACCU
+0f00:	ADD	T5, #$0004
+0f04:	MOV	6(FP), T5
+0f07:	JUMPF	$0DC8
+0f0a:	MOV	T5, 6(FP)
+0f0d:	MOV	ADDR, T5
+0f0f:	MOVD	T7, 0(ADDR)
+0f12:	ADD	T5, #$0004
+0f16:	MOV	6(FP), T5
+0f19:	MOV	ACCU, T2
+0f1b:	MOV	T5, ACCU
+0f1d:	MOV	ADDR, T2
+0f1f:	MOVB	T3, 0(ADDR)
+0f22:	MOVB	ACCU, T3
+0f24:	CMPUB	ACCU, #$0064
+0f26:	BEQ	$0F83
+0f28:	MOVB	ACCU, T3
+0f2a:	CMPUB	ACCU, #$0075
+0f2c:	BEQ	$0F69
+0f2e:	ADD	T2, #$0001
+0f32:	MOVB	ACCU, T3
+0f34:	CMPUB	ACCU, #$0078
+0f36:	BNEF	$0DC8
+0f39:	MOV	ACCU, T0
+0f3b:	MOV	P2, ACCU
+0f3d:	MOVD	ACCU, T7
+0f3f:	MOVD	P4, ACCU
+0f41:	MOVB	P8, #0
+0f44:	MOV	ACCU, #16
+0f47:	MOV	si + 3, ACCU
+0f4b:	LEA	P0, si + 0
+0f4f:	CALL	nforml + 0
+0f52:	MOV	T1, ACCU
+0f54:	MOV	ACCU, T5
+0f56:	ADD	ACCU, #$0002
+0f5a:	MOV	T2, ACCU
+0f5c:	MOV	ADDR, T5
+0f5e:	MOVB	T3, 1(ADDR)
+0f61:	MOVB	ACCU, T3
+0f63:	BNEF	$0C93
+0f66:	JUMPF	$0DD6
+0f69:	MOV	ACCU, T0
+0f6b:	MOV	P2, ACCU
+0f6d:	MOVD	ACCU, T7
+0f6f:	MOVD	P4, ACCU
+0f71:	MOVB	P8, #0
+0f74:	LEA	P0, si + 0
+0f78:	CALL	nforml + 0
+0f7b:	MOV	T1, ACCU
+0f7d:	ADD	T2, #$0002
+0f81:	JUMP	$0F5C
+0f83:	MOV	ACCU, T0
+0f85:	MOV	P2, ACCU
+0f87:	MOVD	ACCU, T7
+0f89:	MOVD	P4, ACCU
+0f8b:	MOVB	P8, #1
+0f8e:	JUMP	$0F74
+0f90:	MOV	ACCU, T0
+0f92:	MOV	P2, ACCU
+0f94:	MOVB	P6, #0
+0f97:	MOV	ACCU, #16
+0f9a:	MOV	si + 3, ACCU
+0f9e:	MOV	T1, 6(FP)
+0fa1:	MOV	ACCU, T1
+0fa3:	MOV	ADDR, T1
+0fa5:	MOV	P4, 0(ADDR)
+0fa8:	ADD	ACCU, #$0002
+0fac:	MOV	6(FP), ACCU
+0faf:	LEA	P0, si + 0
+0fb3:	CALL	nformi + 0
+0fb6:	MOV	T1, ACCU
+0fb8:	JUMPF	$0DC8
+0fbb:	MOV	ACCU, T0
+0fbd:	MOV	P2, ACCU
+0fbf:	MOVB	P6, #0
+0fc2:	JUMP	$0F9E
+0fc4:	MOV	ACCU, T0
+0fc6:	MOV	P2, ACCU
+0fc8:	MOVB	P6, #1
+0fcb:	JUMP	$0F9E
+0fcd:	MOV	ACCU, #1
+0fd0:	MOVB	si + 6, ACCU
+0fd4:	MOV	ADDR, T2
+0fd6:	MOVB	T5, 0(ADDR)
+0fd9:	JUMPF	$0CEF
+0fdc:	MOV	ACCU, #1
+0fdf:	MOVB	si + 7, ACCU
+0fe3:	JUMP	$0FD4
+0fe5:	MOV	ACCU, #48
+0fe8:	MOVB	si + 0, ACCU
+0fec:	JUMP	$0FD4
+0fee:	MOV	ACCU, #1
+0ff1:	MOVB	si + 5, ACCU
+0ff5:	JUMP	$0FD4
+0ff7:	MOVB	ACCU, T1
+0ff9:	LEAX	ADDR, T0 + ACCU
+0ffb:	MOVB	0(ADDR), T3
+0ffe:	LOOPB	T1, #$28
+1001:	BGTF	$0DC8
+1004:	MOVB	ACCU, T1
+1006:	MOV	T5, ACCU
+1008:	MOVB	T1, #0
+100b:	MOVUB	ACCU, 8(FP)
+100e:	BNE	$1017
+1010:	MOV	ACCU, T5
+1012:	ADD	T0, ACCU
+1014:	JUMPF	$0DC8
+1017:	MOV	ACCU, T0
+1019:	MOV	P0, ACCU
+101b:	LEAX	ADDR, T5 + ACCU
+101d:	MOV	ACCU, #0
+1020:	MOVB	0(ADDR), ACCU
+1023:	CALL	puts + 0
+1026:	JUMPF	$0DC8
+--------------------------------------------------------------------
+puts:
+1029:	ENTER	0, 2
+102d:	JSR	$1034
+1030:	RETURN	0, 2
+--------------------------------------------------------------------
+1034 : a0 00 __ LDY #$00
+1036 : b1 0d __ LDA (P0),y 
+1038 : f0 0b __ BEQ $1045
+103a : 20 46 10 JSR $1046 ; (putpch + 0)
+103d : e6 0d __ INC P0 
+103f : d0 f3 __ BNE $1034
+1041 : e6 0e __ INC P1 
+1043 : d0 ef __ BNE $1034
+1045 : 60 __ __ RTS
+--------------------------------------------------------------------
+putpch:
+1046 : ae b5 2e LDX $2eb5 ; (giocharmap + 0)
+1049 : e0 01 __ CPX #$01
+104b : 90 26 __ BCC $1073
+104d : c9 0a __ CMP #$0a
+104f : d0 02 __ BNE $1053
+1051 : a9 0d __ LDA #$0d
+1053 : c9 09 __ CMP #$09
+1055 : f0 1f __ BEQ $1076
+1057 : e0 02 __ CPX #$02
+1059 : 90 18 __ BCC $1073
+105b : c9 41 __ CMP #$41
+105d : 90 14 __ BCC $1073
+105f : c9 7b __ CMP #$7b
+1061 : b0 10 __ BCS $1073
+1063 : c9 61 __ CMP #$61
+1065 : b0 04 __ BCS $106b
+1067 : c9 5b __ CMP #$5b
+1069 : b0 08 __ BCS $1073
+106b : 49 20 __ EOR #$20
+106d : e0 03 __ CPX #$03
+106f : f0 02 __ BEQ $1073
+1071 : 29 df __ AND #$df
+1073 : 4c d2 ff JMP $ffd2 
+1076 : 38 __ __ SEC
+1077 : 20 f0 ff JSR $fff0 
+107a : 98 __ __ TYA
+107b : 29 03 __ AND #$03
+107d : 49 03 __ EOR #$03
+107f : aa __ __ TAX
+1080 : a9 20 __ LDA #$20
+1082 : 20 d2 ff JSR $ffd2 
+1085 : ca __ __ DEX
+1086 : 10 fa __ BPL $1082
+1088 : 60 __ __ RTS
+--------------------------------------------------------------------
+giocharmap:
+2eb5 : __ __ __ BYT 01                                              : .
+--------------------------------------------------------------------
+nformi:
+1089:	ENTER	0, 2
+108d:	MOV	ACCU, P4
+108f:	MOV	T0, ACCU
+1091:	MOV	T1, ACCU
+1093:	MOVB	T2, #0
+1096:	MOVB	ACCU, P6
+1098:	BEQ	$109F
+109a:	MOV	ACCU, T0
+109c:	BLTF	$11E9
+109f:	MOVB	T3, #16
+10a2:	MOV	ACCU, T0
+10a4:	BEQ	$10D6
+10a6:	MOV	ACCU, P0
+10a8:	MOV	T0, ACCU
+10aa:	MOV	ADDR, T0
+10ac:	MOV	T5, 3(ADDR)
+10af:	MOV	ACCU, T1
+10b1:	MODU	ACCU, T5
+10b3:	MOV	T6, ACCU
+10b5:	CMPS	ACCU, #$000A
+10b8:	BLE	$10C0
+10ba:	ADD	T6, #$0030
+10be:	JUMP	$10C4
+10c0:	ADD	T6, #$0037
+10c4:	ADDB	T3, #$00FF
+10c7:	LEAXB	ADDR, buffer + 0 + T3
+10cb:	MOVB	0(ADDR), T6
+10ce:	MOV	ACCU, T1
+10d0:	DIVU	ACCU, T5
+10d2:	MOV	T1, ACCU
+10d4:	BNE	$10AA
+10d6:	MOV	ACCU, P0
+10d8:	MOV	T0, ACCU
+10da:	MOV	ADDR, T0
+10dc:	MOVB	T4, 2(ADDR)
+10df:	MOVB	ACCU, T4
+10e1:	CMPUB	ACCU, #$00FF
+10e3:	BNE	$10EA
+10e5:	MOV	T1, #15
+10e8:	JUMP	$10F2
+10ea:	MOVB	ACCU, T4
+10ec:	MOV	T1, ACCU
+10ee:	SUBR	T1, #$0010
+10f2:	MOVB	ACCU, T1
+10f4:	CMPUB	ACCU, T3
+10f6:	BLE	$110B
+10f8:	ADDB	T3, #$00FF
+10fb:	LEAXB	ADDR, buffer + 0 + T3
+10ff:	MOV	ACCU, #48
+1102:	MOVB	0(ADDR), ACCU
+1105:	MOVB	ACCU, T1
+1107:	CMPUB	ACCU, T3
+1109:	BGT	$10F8
+110b:	MOV	ADDR, T0
+110d:	MOVUB	ACCU, 7(ADDR)
+1110:	BEQ	$1131
+1112:	MOV	ACCU, 3(ADDR)
+1115:	CMPU	ACCU, #$0010
+1118:	BNE	$1131
+111a:	LEAXB	ADDR, si + 7 + T3
+111e:	MOV	ACCU, #88
+1121:	MOVB	0(ADDR), ACCU
+1124:	ADDB	T3, #$00FE
+1127:	LEAXB	ADDR, buffer + 0 + T3
+112b:	MOV	ACCU, #48
+112e:	MOVB	0(ADDR), ACCU
+1131:	MOVB	T4, #0
+1134:	MOVB	ACCU, T2
+1136:	BNEF	$11D9
+1139:	MOV	ADDR, T0
+113b:	MOVUB	ACCU, 5(ADDR)
+113e:	BEQ	$114D
+1140:	ADDB	T3, #$00FF
+1143:	LEAXB	ADDR, buffer + 0 + T3
+1147:	MOV	ACCU, #43
+114a:	MOVB	0(ADDR), ACCU
+114d:	MOV	ADDR, T0
+114f:	MOVUB	ACCU, 6(ADDR)
+1152:	BEQ	$1196
+1154:	MOVB	ACCU, T3
+1156:	CMPUB	ACCU, #$0010
+1158:	BLE	$1174
+115a:	MOV	ACCU, P2
+115c:	MOV	T1, ACCU
+115e:	MOVB	ACCU, T4
+1160:	LEAXB	ADDR, buffer + 0 + T3
+1164:	MOVB	T2, 0(ADDR)
+1167:	LEAX	ADDR, T1 + ACCU
+1169:	MOVB	0(ADDR), T2
+116c:	ADDB	T4, #$0001
+116f:	LOOPB	T3, #$10
+1172:	BGT	$115E
+1174:	MOV	ADDR, T0
+1176:	MOVUB	ACCU, 1(ADDR)
+1179:	CMPUB	ACCU, T4
+117b:	BGE	$1190
+117d:	MOVB	ACCU, T4
+117f:	MOV	T1, ACCU
+1181:	MOV	ACCU, P2
+1183:	MOVB	T2, 0(ADDR)
+1186:	LEAX	ADDR, T1 + ACCU
+1188:	MOVB	0(ADDR), T2
+118b:	ADDB	T4, #$0001
+118e:	JUMP	$1174
+1190:	MOVB	ACCU, T4
+1192:	RETURN	0, 2
+1196:	MOV	ADDR, T0
+1198:	MOVUB	T1, 1(ADDR)
+119b:	MOVB	ACCU, T3
+119d:	ADD	ACCU, T1
+119f:	CMPU	ACCU, #$0010
+11a2:	BGE	$11B7
+11a4:	ADDB	T3, #$00FF
+11a7:	MOVB	ACCU, T3
+11a9:	LEA	T1, buffer + 0
+11ad:	MOVB	T2, 0(ADDR)
+11b0:	LEAX	ADDR, T1 + ACCU
+11b2:	MOVB	0(ADDR), T2
+11b5:	JUMP	$1196
+11b7:	MOVB	ACCU, T3
+11b9:	CMPUB	ACCU, #$0010
+11bb:	BLE	$1190
+11bd:	MOV	ACCU, P2
+11bf:	MOV	T0, ACCU
+11c1:	MOVB	ACCU, T4
+11c3:	LEAXB	ADDR, buffer + 0 + T3
+11c7:	MOVB	T2, 0(ADDR)
+11ca:	LEAX	ADDR, T0 + ACCU
+11cc:	MOVB	0(ADDR), T2
+11cf:	ADDB	T4, #$0001
+11d2:	LOOPB	T3, #$10
+11d5:	BGT	$11C1
+11d7:	JUMP	$1190
+11d9:	ADDB	T3, #$00FF
+11dc:	LEAXB	ADDR, buffer + 0 + T3
+11e0:	MOV	ACCU, #45
+11e3:	MOVB	0(ADDR), ACCU
+11e6:	JUMPF	$114D
+11e9:	MOVB	T2, #1
+11ec:	MOVB	T3, #16
+11ef:	NEG	ACCU
+11f0:	MOV	T1, ACCU
+11f2:	BNEF	$10A6
+11f5:	JUMPF	$10D6
+--------------------------------------------------------------------
+nforml:
+11f8:	ENTER	8, 10
+11fc:	MOVD	ACCU, P4
+11fe:	MOVD	T0, ACCU
+1200:	MOVD	T1, ACCU
+1202:	MOVB	T2, #0
+1205:	MOVB	ACCU, P8
+1207:	BEQ	$1216
+1209:	MOVD	ACCU, #$00000000
+120f:	EXTRT	T0, inp_op_cmp_s32 + 0
+1213:	BLTF	$1382
+1216:	MOVB	T3, #16
+1219:	MOVD	ACCU, #$00000000
+121f:	EXTRT	T0, inp_op_cmp_u32 + 0
+1223:	BLE	$126F
+1225:	MOV	ACCU, P0
+1227:	MOV	T5, ACCU
+1229:	MOV	ADDR, T5
+122b:	MOV	ACCU, 3(ADDR)
+122e:	EXTRT	$00, inp_op_ext_u16 + 0
+1232:	MOVD	T0, ACCU
+1234:	MOVD	ACCU, T1
+1236:	EXTRT	T0, inp_binop_mod_u32 + 0
+123a:	MOVD	T7, ACCU
+123c:	CMPS	ACCU, #$000A
+123f:	BLE	$1249
+1241:	MOV	ACCU, T7
+1243:	ADD	ACCU, #$0030
+1247:	JUMP	$124F
+1249:	MOV	ACCU, T7
+124b:	ADD	ACCU, #$0037
+124f:	MOV	T6, ACCU
+1251:	ADDB	T3, #$00FF
+1254:	LEAXB	ADDR, buffer + 0 + T3
+1258:	MOVB	0(ADDR), T6
+125b:	MOVD	ACCU, T1
+125d:	EXTRT	T0, inp_binop_div_u32 + 0
+1261:	MOVD	T1, ACCU
+1263:	MOVD	ACCU, #$00000000
+1269:	EXTRT	T1, inp_op_cmp_u32 + 0
+126d:	BGT	$1229
+126f:	MOV	ACCU, P0
+1271:	MOV	T5, ACCU
+1273:	MOV	ADDR, T5
+1275:	MOVB	T4, 2(ADDR)
+1278:	MOVB	ACCU, T4
+127a:	CMPUB	ACCU, #$00FF
+127c:	BNE	$1283
+127e:	MOV	T6, #15
+1281:	JUMP	$128B
+1283:	MOVB	ACCU, T4
+1285:	MOV	T6, ACCU
+1287:	SUBR	T6, #$0010
+128b:	MOVB	ACCU, T6
+128d:	CMPUB	ACCU, T3
+128f:	BLE	$12A4
+1291:	ADDB	T3, #$00FF
+1294:	LEAXB	ADDR, buffer + 0 + T3
+1298:	MOV	ACCU, #48
+129b:	MOVB	0(ADDR), ACCU
+129e:	MOVB	ACCU, T6
+12a0:	CMPUB	ACCU, T3
+12a2:	BGT	$1291
+12a4:	MOV	ADDR, T5
+12a6:	MOVUB	ACCU, 7(ADDR)
+12a9:	BEQ	$12CA
+12ab:	MOV	ACCU, 3(ADDR)
+12ae:	CMPU	ACCU, #$0010
+12b1:	BNE	$12CA
+12b3:	LEAXB	ADDR, si + 7 + T3
+12b7:	MOV	ACCU, #88
+12ba:	MOVB	0(ADDR), ACCU
+12bd:	ADDB	T3, #$00FE
+12c0:	LEAXB	ADDR, buffer + 0 + T3
+12c4:	MOV	ACCU, #48
+12c7:	MOVB	0(ADDR), ACCU
+12ca:	MOVB	T4, #0
+12cd:	MOVB	ACCU, T2
+12cf:	BNEF	$1372
+12d2:	MOV	ADDR, T5
+12d4:	MOVUB	ACCU, 5(ADDR)
+12d7:	BEQ	$12E6
+12d9:	ADDB	T3, #$00FF
+12dc:	LEAXB	ADDR, buffer + 0 + T3
+12e0:	MOV	ACCU, #43
+12e3:	MOVB	0(ADDR), ACCU
+12e6:	MOV	ADDR, T5
+12e8:	MOVUB	ACCU, 6(ADDR)
+12eb:	BEQ	$132F
+12ed:	MOVB	ACCU, T3
+12ef:	CMPUB	ACCU, #$0010
+12f1:	BLE	$130D
+12f3:	MOV	ACCU, P2
+12f5:	MOV	T6, ACCU
+12f7:	MOVB	ACCU, T4
+12f9:	LEAXB	ADDR, buffer + 0 + T3
+12fd:	MOVB	T2, 0(ADDR)
+1300:	LEAX	ADDR, T6 + ACCU
+1302:	MOVB	0(ADDR), T2
+1305:	ADDB	T4, #$0001
+1308:	LOOPB	T3, #$10
+130b:	BGT	$12F7
+130d:	MOV	ADDR, T5
+130f:	MOVUB	ACCU, 1(ADDR)
+1312:	CMPUB	ACCU, T4
+1314:	BGE	$1329
+1316:	MOVB	ACCU, T4
+1318:	MOV	T6, ACCU
+131a:	MOV	ACCU, P2
+131c:	MOVB	T2, 0(ADDR)
+131f:	LEAX	ADDR, T6 + ACCU
+1321:	MOVB	0(ADDR), T2
+1324:	ADDB	T4, #$0001
+1327:	JUMP	$130D
+1329:	MOVB	ACCU, T4
+132b:	RETURN	8, 10
+132f:	MOV	ADDR, T5
+1331:	MOVUB	T6, 1(ADDR)
+1334:	MOVB	ACCU, T3
+1336:	ADD	ACCU, T6
+1338:	CMPU	ACCU, #$0010
+133b:	BGE	$1350
+133d:	ADDB	T3, #$00FF
+1340:	MOVB	ACCU, T3
+1342:	LEA	T6, buffer + 0
+1346:	MOVB	T2, 0(ADDR)
+1349:	LEAX	ADDR, T6 + ACCU
+134b:	MOVB	0(ADDR), T2
+134e:	JUMP	$132F
+1350:	MOVB	ACCU, T3
+1352:	CMPUB	ACCU, #$0010
+1354:	BLE	$1329
+1356:	MOV	ACCU, P2
+1358:	MOV	T5, ACCU
+135a:	MOVB	ACCU, T4
+135c:	LEAXB	ADDR, buffer + 0 + T3
+1360:	MOVB	T2, 0(ADDR)
+1363:	LEAX	ADDR, T5 + ACCU
+1365:	MOVB	0(ADDR), T2
+1368:	ADDB	T4, #$0001
+136b:	LOOPB	T3, #$10
+136e:	BGT	$135A
+1370:	JUMP	$1329
+1372:	ADDB	T3, #$00FF
+1375:	LEAXB	ADDR, buffer + 0 + T3
+1379:	MOV	ACCU, #45
+137c:	MOVB	0(ADDR), ACCU
+137f:	JUMPF	$12E6
+1382:	MOVB	T2, #1
+1385:	MOVB	T3, #16
+1388:	MOVD	ACCU, T0
+138a:	EXTRT	$00, negaccu32 + 0
+138e:	MOVD	T1, ACCU
+1390:	MOVD	ACCU, #$00000000
+1396:	EXTRT	T1, inp_op_cmp_u32 + 0
+139a:	BGTF	$1225
+139d:	JUMPF	$126F
+--------------------------------------------------------------------
+nformf:
+13a0:	ENTER	9, 11
+13a4:	PUSH	#$0002
+13a7:	MOV	T0, 4(FP)
+13aa:	MOV	ACCU, T0
+13ac:	MOV	T1, ACCU
+13ae:	MOVD	T2, 6(FP)
+13b1:	MOVD	ACCU, #$00000000
+13b7:	CMPF	ACCU, T2
+13b9:	BLTF	$170B
+13bc:	MOVD	ACCU, T2
+13be:	MOVD	P0, ACCU
+13c0:	MOV	ADDR, 2(FP)
+13c3:	MOVUB	ACCU, 5(ADDR)
+13c6:	BEQF	$16FC
+13c9:	MOV	ACCU, #43
+13cc:	MOV	ADDR, T0
+13ce:	MOVB	0(ADDR), ACCU
+13d1:	MOVB	T3, #1
+13d4:	MOV	T4, #1
+13d7:	MOV	T5, #2
+13da:	MOV	T6, #3
+13dd:	CALL	isinf + 0
+13e0:	MOVB	ACCU, ACCU
+13e2:	BNEF	$16D8
+13e5:	MOV	ADDR, 2(FP)
+13e8:	MOVB	T7, 2(ADDR)
+13eb:	MOVB	ACCU, T7
+13ed:	CMPUB	ACCU, #$00FF
+13ef:	BNE	$13F6
+13f1:	MOV	T4, #6
+13f4:	JUMP	$13FA
+13f6:	MOVB	ACCU, T7
+13f8:	MOV	T4, ACCU
+13fa:	MOVB	ACCU, T4
+13fc:	MOVB	T7, ACCU
+13fe:	MOV	T5, #0
+1401:	MOVD	T2, 6(FP)
+1404:	MOVD	ACCU, #$00000000
+140a:	CMPF	ACCU, T2
+140c:	BEQ	$147A
+140e:	MOVD	T11, 6(FP)
+1411:	MOVD	ACCU, #$447a0000
+1417:	CMPF	ACCU, T2
+1419:	BLT	$1430
+141b:	MOVD	ACCU, T11
+141d:	MOVD	$03, #$447a0000
+1423:	DIVF	ACCU, $03
+1425:	MOVD	T2, ACCU
+1427:	MOVD	6(FP), T2
+142a:	ADD	T5, #$0003
+142e:	JUMP	$140E
+1430:	MOVD	ACCU, T11
+1432:	MOVD	T2, ACCU
+1434:	MOVD	T11, 6(FP)
+1437:	MOVD	ACCU, #$3f800000
+143d:	CMPF	ACCU, T2
+143f:	BGE	$1456
+1441:	MOVD	ACCU, T11
+1443:	MOVD	$03, #$447a0000
+1449:	MULF	ACCU, $03
+144b:	MOVD	T2, ACCU
+144d:	MOVD	6(FP), T2
+1450:	ADD	T5, #$FFFD
+1454:	JUMP	$1434
+1456:	MOVD	ACCU, T11
+1458:	MOVD	T2, ACCU
+145a:	MOVD	ACCU, #$41200000
+1460:	CMPF	ACCU, T2
+1462:	BLT	$147A
+1464:	MOVD	ACCU, 6(FP)
+1467:	MOVD	$03, #$41200000
+146d:	DIVF	ACCU, $03
+146f:	MOVD	T2, ACCU
+1471:	MOVD	6(FP), T2
+1474:	ADD	T5, #$0001
+1478:	JUMP	$145A
+147a:	MOVB	ACCU, T4
+147c:	MOV	T6, ACCU
+147e:	ADD	T6, #$0001
+1482:	MOVB	ACCU, T6
+1484:	MOVB	T10, ACCU
+1486:	MOVB	T8, 10(FP)
+1489:	MOVB	ACCU, T8
+148b:	CMPUB	ACCU, #$0065
+148d:	NOT	ACCU
+148e:	ANDB	ACCU, #$0001
+1491:	MOVB	T9, ACCU
+1493:	MOVB	T12, ACCU
+1495:	MOVB	ACCU, T8
+1497:	CMPUB	ACCU, #$0067
+1499:	BEQF	$16C7
+149c:	MOVB	ACCU, T9
+149e:	BNEF	$1684
+14a1:	MOV	ACCU, T5
+14a3:	BGE	$14B9
+14a5:	MOVD	ACCU, 6(FP)
+14a8:	MOVD	$03, #$41200000
+14ae:	DIVF	ACCU, $03
+14b0:	MOVD	6(FP), ACCU
+14b3:	ADD	T5, #$0001
+14b7:	JUMP	$14A1
+14b9:	MOVB	ACCU, T4
+14bb:	ADD	ACCU, T5
+14bd:	ADD	ACCU, #$0001
+14c1:	MOV	T10, ACCU
+14c3:	CMPUB	ACCU, #$0007
+14c5:	BGT	$14CD
+14c7:	MOVD	T2, fround5 + 24
+14cb:	JUMP	$14D8
+14cd:	MOV	ACCU, T10
+14cf:	SHL	ACCU, #2
+14d1:	LEAX	ADDR, inp_op_extrt + 20 + ACCU
+14d5:	MOVD	T2, 0(ADDR)
+14d8:	MOVD	ACCU, 6(FP)
+14db:	ADDF	ACCU, T2
+14dd:	MOVD	T2, ACCU
+14df:	MOVD	6(FP), T2
+14e2:	MOVD	ACCU, #$41200000
+14e8:	CMPF	ACCU, T2
+14ea:	BLT	$1501
+14ec:	MOVD	ACCU, 6(FP)
+14ef:	MOVD	$03, #$41200000
+14f5:	DIVF	ACCU, $03
+14f7:	MOVD	6(FP), ACCU
+14fa:	MOVB	ACCU, T4
+14fc:	ADDB	ACCU, #$00FF
+14ff:	MOVB	T7, ACCU
+1501:	MOVB	ACCU, T10
+1503:	MOV	T4, ACCU
+1505:	MOVB	ACCU, T7
+1507:	NEG	ACCU
+1508:	ADD	ACCU, T4
+150a:	MOV	T4, ACCU
+150c:	MOVB	T7, ACCU
+150e:	MOVB	ACCU, T10
+1510:	CMPUB	ACCU, #$0014
+1512:	BGE	$1517
+1514:	MOVB	T10, #20
+1517:	MOVB	ACCU, T4
+1519:	BNE	$1528
+151b:	MOVB	ACCU, T3
+151d:	LEAX	ADDR, T0 + ACCU
+151f:	MOV	ACCU, #48
+1522:	MOVB	0(ADDR), ACCU
+1525:	ADDB	T3, #$0001
+1528:	MOVB	T8, #0
+152b:	MOVB	ACCU, T7
+152d:	CMPUB	ACCU, T8
+152f:	BNE	$153E
+1531:	MOVB	ACCU, T3
+1533:	LEAX	ADDR, T1 + ACCU
+1535:	MOV	ACCU, #46
+1538:	MOVB	0(ADDR), ACCU
+153b:	ADDB	T3, #$0001
+153e:	MOVB	ACCU, T3
+1540:	ADD	ACCU, T1
+1542:	MOV	T0, ACCU
+1544:	MOVB	ACCU, T8
+1546:	CMPUB	ACCU, #$0006
+1548:	BLT	$156F
+154a:	MOV	ADDR, T0
+154c:	MOVD	T2, 6(FP)
+154f:	MOVD	ACCU, T2
+1551:	CNVFS	ACCU
+1552:	MOV	T4, ACCU
+1554:	CNVSF	ACCU
+1555:	MOVD	T11, ACCU
+1557:	MOVD	ACCU, T2
+1559:	SUBF	ACCU, T11
+155b:	MOVD	$03, #$41200000
+1561:	MULF	ACCU, $03
+1563:	MOVD	6(FP), ACCU
+1566:	ADD	T4, #$0030
+156a:	MOVB	0(ADDR), T4
+156d:	JUMP	$1577
+156f:	MOV	ACCU, #48
+1572:	MOV	ADDR, T0
+1574:	MOVB	0(ADDR), ACCU
+1577:	ADDB	T3, #$0001
+157a:	ADDB	T8, #$0001
+157d:	MOVB	ACCU, T10
+157f:	CMPUB	ACCU, T8
+1581:	BLT	$152B
+1583:	MOVB	ACCU, T12
+1585:	BNEF	$161C
+1588:	MOV	T0, 2(FP)
+158b:	MOV	ADDR, T0
+158d:	MOVUB	ACCU, 1(ADDR)
+1590:	CMPUB	ACCU, T3
+1592:	BLT	$159D
+1594:	MOVB	ACCU, T3
+1596:	POP	#$0002
+1599:	RETURN	9, 11
+159d:	MOVUB	ACCU, 6(ADDR)
+15a0:	BEQ	$15C5
+15a2:	MOV	ACCU, T0
+15a4:	MOV	T4, ACCU
+15a6:	MOV	ADDR, T4
+15a8:	MOVUB	ACCU, 1(ADDR)
+15ab:	CMPUB	ACCU, T3
+15ad:	BGE	$15BE
+15af:	MOVB	ACCU, T3
+15b1:	LEAX	ADDR, T1 + ACCU
+15b3:	MOV	ACCU, #32
+15b6:	MOVB	0(ADDR), ACCU
+15b9:	ADDB	T3, #$0001
+15bc:	JUMP	$15A6
+15be:	MOV	ADDR, T0
+15c0:	MOVUB	ACCU, 1(ADDR)
+15c3:	JUMP	$1596
+15c5:	MOVB	ACCU, T3
+15c7:	CMPUB	ACCU, #$0001
+15c9:	BGT	$15F4
+15cb:	MOVB	ACCU, T3
+15cd:	MOV	T4, ACCU
+15cf:	MOVB	T7, #1
+15d2:	MOVB	ACCU, T7
+15d4:	MOV	T5, ACCU
+15d6:	MOV	ACCU, T4
+15d8:	SUB	ACCU, T5
+15da:	LEAX	ADDR, T1 + ACCU
+15dc:	MOVB	T8, 0(ADDR)
+15df:	MOV	ADDR, T0
+15e1:	MOVUB	ACCU, 1(ADDR)
+15e4:	SUB	ACCU, T5
+15e6:	LEAX	ADDR, T1 + ACCU
+15e8:	MOVB	0(ADDR), T8
+15eb:	ADDB	T7, #$0001
+15ee:	MOVB	ACCU, T3
+15f0:	CMPUB	ACCU, T7
+15f2:	BLE	$15D2
+15f4:	MOV	ACCU, T0
+15f6:	MOV	T4, ACCU
+15f8:	MOVB	T7, #0
+15fb:	MOVB	ACCU, T7
+15fd:	MOV	T5, ACCU
+15ff:	MOV	ADDR, T4
+1601:	MOVUB	T6, 1(ADDR)
+1604:	MOVB	ACCU, T3
+1606:	NEG	ACCU
+1607:	ADD	ACCU, T6
+1609:	CMPU	ACCU, T5
+160b:	BGE	$15BE
+160d:	MOV	ACCU, T1
+160f:	LEAX	ADDR, T5 + ACCU
+1611:	MOV	ACCU, #32
+1614:	MOVB	0(ADDR), ACCU
+1617:	ADDB	T7, #$0001
+161a:	JUMP	$15FB
+161c:	MOVB	ACCU, T3
+161e:	LEAX	ADDR, T1 + ACCU
+1620:	MOV	ACCU, #69
+1623:	MOVB	0(ADDR), ACCU
+1626:	MOVB	ACCU, T3
+1628:	ADDB	ACCU, #$0001
+162b:	MOVB	ACCU, ACCU
+162d:	ADD	ACCU, T1
+162f:	MOV	T0, ACCU
+1631:	MOV	ACCU, T5
+1633:	BLT	$163F
+1635:	MOV	ACCU, #43
+1638:	MOV	ADDR, T0
+163a:	MOVB	0(ADDR), ACCU
+163d:	JUMP	$164C
+163f:	MOV	ACCU, #45
+1642:	MOV	ADDR, T0
+1644:	MOVB	0(ADDR), ACCU
+1647:	MOV	ACCU, T5
+1649:	NEG	ACCU
+164a:	MOV	T5, ACCU
+164c:	MOV	ACCU, T5
+164e:	MOV	ADDR, #10
+1651:	DIVS	ACCU, ADDR
+1653:	MOV	T0, ACCU
+1655:	ADD	T0, #$0030
+1659:	MOVB	ACCU, T3
+165b:	ADDB	ACCU, #$0002
+165e:	MOVB	ACCU, ACCU
+1660:	LEAX	ADDR, T1 + ACCU
+1662:	MOVB	0(ADDR), T0
+1665:	MOV	ACCU, T5
+1667:	MOV	ADDR, #10
+166a:	MODS	ACCU, ADDR
+166c:	MOV	T0, ACCU
+166e:	ADD	T0, #$0030
+1672:	MOVB	ACCU, T3
+1674:	ADDB	ACCU, #$0003
+1677:	MOVB	ACCU, ACCU
+1679:	LEAX	ADDR, T1 + ACCU
+167b:	MOVB	0(ADDR), T0
+167e:	ADDB	T3, #$0004
+1681:	JUMPF	$1588
+1684:	MOVB	ACCU, T6
+1686:	CMPUB	ACCU, #$0007
+1688:	BGT	$1690
+168a:	MOVD	T2, fround5 + 24
+168e:	JUMP	$169D
+1690:	MOVB	ACCU, T6
+1692:	SHL	ACCU, #2
+1694:	MOVB	T4, ACCU
+1696:	LEAX	ADDR, inp_op_extrt + 20 + T4
+169a:	MOVD	T2, 0(ADDR)
+169d:	MOVD	ACCU, 6(FP)
+16a0:	ADDF	ACCU, T2
+16a2:	MOVD	T2, ACCU
+16a4:	MOVD	6(FP), T2
+16a7:	MOVD	ACCU, #$41200000
+16ad:	CMPF	ACCU, T2
+16af:	BLTF	$1501
+16b2:	MOVD	ACCU, 6(FP)
+16b5:	MOVD	$03, #$41200000
+16bb:	DIVF	ACCU, $03
+16bd:	MOVD	6(FP), ACCU
+16c0:	ADD	T5, #$0001
+16c4:	JUMPF	$1501
+16c7:	MOV	ACCU, T5
+16c9:	CMPS	ACCU, #$0003
+16cc:	BLT	$16D3
+16ce:	MOV	ACCU, T5
+16d0:	BGEF	$149C
+16d3:	MOVB	T12, #1
+16d6:	JUMP	$1684
+16d8:	MOV	ACCU, T0
+16da:	LEAX	ADDR, T4 + ACCU
+16dc:	MOV	ACCU, #73
+16df:	MOVB	0(ADDR), ACCU
+16e2:	MOV	ACCU, T0
+16e4:	LEAX	ADDR, T5 + ACCU
+16e6:	MOV	ACCU, #78
+16e9:	MOVB	0(ADDR), ACCU
+16ec:	MOV	ACCU, T6
+16ee:	LEAX	ADDR, T0 + ACCU
+16f0:	MOV	ACCU, #70
+16f3:	MOVB	0(ADDR), ACCU
+16f6:	ADDB	T3, #$0003
+16f9:	JUMPF	$1588
+16fc:	MOVB	T3, #0
+16ff:	MOV	T4, #0
+1702:	MOV	T5, #1
+1705:	MOV	T6, #2
+1708:	JUMPF	$13DD
+170b:	MOVD	ACCU, T2
+170d:	NEGF	ACCU
+170e:	MOVD	T2, ACCU
+1710:	MOVD	P0, ACCU
+1712:	MOVD	6(FP), T2
+1715:	MOV	ACCU, #45
+1718:	JUMPF	$13CC
+--------------------------------------------------------------------
+isinf:
+171b:	ENTER	0, 2
+171f:	MOVD	ACCU, P0
+1721:	MOVD	T0, ACCU
+1723:	MOVD	buffer + 12, T0
+1727:	MOV	ACCU, buffer + 14
+172b:	SHRU	ACCU, #7
+172d:	CMPUB	ACCU, #$00FF
+172f:	NOT	ACCU
+1730:	ANDB	ACCU, #$0001
+1733:	MOVB	ACCU, ACCU
+1735:	RETURN	0, 2
+--------------------------------------------------------------------
+fround5:
+2eb6 : __ __ __ BYT 00 00 00 3f cd cc 4c 3d 0a d7 a3 3b 6f 12 03 3a : ...?..L=...;o..:
+2ec6 : __ __ __ BYT 17 b7 51 38 ac c5 a7 36 bd 37 06 35             : ..Q8...6.7.5
+--------------------------------------------------------------------
+1739 : __ __ __ BYT 20 25 73 0a 00                                  :  %s..
+--------------------------------------------------------------------
+parse_expr:
+173e:	ENTER	0, 2
+1742:	PUSH	#$0004
+1745:	CALL	init_scanner + 0
+1748:	CALL	next_token + 0
+174b:	CALL	parse_arith_expr + 0
+174e:	MOV	T0, ACCU
+1750:	MOVUB	ACCU, token + 0
+1754:	CMPUB	ACCU, #$0007
+1756:	BNE	$1761
+1758:	MOV	ACCU, T0
+175a:	POP	#$0004
+175d:	RETURN	0, 2
+1761:	LEA	T0, $1d43
+1765:	MOV	2(SP), T0
+1768:	CALL	printf + 0
+176b:	MOVB	T1, token + 0
+176f:	MOVB	2(SP), T1
+1772:	CALL	print_token + 0
+1775:	LEA	T0, $1d66
+1779:	MOV	2(SP), T0
+177c:	CALL	printf + 0
+177f:	JUMP	$177F
+--------------------------------------------------------------------
+init_scanner:
+1781:	ENTER	0, 2
+1785:	PUSH	#$0002
+1788:	MOV	ACCU, #0
+178b:	MOV	position + 0, ACCU
+178f:	CALL	next_char + 0
+1792:	POP	#$0002
+1795:	RETURN	0, 2
+--------------------------------------------------------------------
+position:
+2ed2 : __ __ __ BYT 00 00                                           : ..
+--------------------------------------------------------------------
+next_char:
+1799:	ENTER	0, 2
+179d:	MOV	T0, position + 0
+17a1:	LEAX	ADDR, inputstring + 0 + T0
+17a5:	MOVB	T2, 0(ADDR)
+17a8:	MOVB	current_char + 0, T2
+17ac:	ADD	T0, #$0001
+17b0:	MOV	position + 0, T0
+17b4:	RETURN	0, 2
+--------------------------------------------------------------------
+current_char:
+2fcf : __ __ __ BSS	1
+--------------------------------------------------------------------
+next_token:
+17b8:	ENTER	0, 2
+17bc:	PUSH	#$0008
+17bf:	MOVUB	P0, current_char + 0
+17c3:	CALL	is_space + 0
+17c6:	BEQ	$17CD
+17c8:	CALL	next_char + 0
+17cb:	JUMP	$17BF
+17cd:	MOVUB	P0, current_char + 0
+17d1:	CALL	isdigit + 0
+17d4:	BEQ	$17E0
+17d6:	CALL	string_to_number + 0
+17d9:	POP	#$0008
+17dc:	RETURN	0, 2
+17e0:	MOVB	T0, current_char + 0
+17e4:	MOVB	ACCU, T0
+17e6:	CMPUB	ACCU, #$002D
+17e8:	BNE	$17F2
+17ea:	MOVB	P0, #2
+17ed:	CALL	make_token + 0
+17f0:	JUMP	$17D9
+17f2:	MOVB	ACCU, T0
+17f4:	MOV	T1, ACCU
+17f6:	CMPUB	ACCU, #$002D
+17f8:	BLE	$1838
+17fa:	MOVB	ACCU, T0
+17fc:	CMPUB	ACCU, #$0028
+17fe:	BNE	$1805
+1800:	MOVB	P0, #5
+1803:	JUMP	$17ED
+1805:	MOVB	ACCU, T0
+1807:	CMPUB	ACCU, #$0029
+1809:	BNE	$1810
+180b:	MOVB	P0, #6
+180e:	JUMP	$17ED
+1810:	MOVB	ACCU, T0
+1812:	CMPUB	ACCU, #$002A
+1814:	BNE	$181B
+1816:	MOVB	P0, #3
+1819:	JUMP	$17ED
+181b:	MOVB	ACCU, T0
+181d:	CMPUB	ACCU, #$002B
+181f:	BNE	$1826
+1821:	MOVB	P0, #1
+1824:	JUMP	$17ED
+1826:	MOV	4(SP), T1
+1829:	MOV	6(SP), T1
+182c:	LEA	T1, $1a12
+1830:	MOV	2(SP), T1
+1833:	CALL	printf + 0
+1836:	JUMP	$17D9
+1838:	MOVB	ACCU, T0
+183a:	CMPUB	ACCU, #$002E
+183c:	BNE	$1847
+183e:	MOV	ACCU, #7
+1841:	MOVB	token + 0, ACCU
+1845:	JUMP	$17D9
+1847:	MOVB	ACCU, T0
+1849:	CMPUB	ACCU, #$002F
+184b:	BNE	$1826
+184d:	MOVB	P0, #4
+1850:	JUMP	$17ED
+--------------------------------------------------------------------
+is_space:
+1852:	ENTER	0, 2
+1856:	MOV	ACCU, P0
+1858:	MOV	T0, ACCU
+185a:	CMPU	ACCU, #$0020
+185d:	BEQ	$1879
+185f:	MOV	ACCU, T0
+1861:	CMPU	ACCU, #$0009
+1864:	BEQ	$1879
+1866:	MOV	ACCU, T0
+1868:	CMPU	ACCU, #$000A
+186b:	BEQ	$1879
+186d:	MOV	ACCU, T0
+186f:	CMPU	ACCU, #$000D
+1872:	BEQ	$1879
+1874:	MOV	ACCU, #0
+1877:	JUMP	$187C
+1879:	MOV	ACCU, #1
+187c:	RETURN	0, 2
+--------------------------------------------------------------------
+isdigit:
+1880:	ENTER	0, 2
+1884:	MOV	ACCU, P0
+1886:	MOV	T0, ACCU
+1888:	CMPS	ACCU, #$0030
+188b:	BGT	$1894
+188d:	MOV	ACCU, T0
+188f:	CMPS	ACCU, #$0039
+1892:	BGE	$1899
+1894:	MOV	ACCU, #0
+1897:	JUMP	$189C
+1899:	MOV	ACCU, #1
+189c:	RETURN	0, 2
+--------------------------------------------------------------------
+string_to_number:
+18a0:	ENTER	0, 2
+18a4:	PUSH	#$0002
+18a7:	MOV	P0, #6
+18aa:	MOV	ACCU, #0
+18ad:	MOVB	token + 0, ACCU
+18b1:	CALL	malloc + 0
+18b4:	MOV	T0, ACCU
+18b6:	MOV	array + 0, T0
+18ba:	MOVUB	P0, current_char + 0
+18be:	MOV	T0, #0
+18c1:	CALL	isdigit + 0
+18c4:	BNE	$18CE
+18c6:	MOVUB	ACCU, current_char + 0
+18ca:	CMPUB	ACCU, #$0020
+18cc:	BNE	$1923
+18ce:	MOV	ACCU, #0
+18d1:	MOV	number + 0, ACCU
+18d5:	MOVUB	P0, current_char + 0
+18d9:	CALL	isdigit + 0
+18dc:	BEQ	$18F3
+18de:	MOV	T2, number + 0
+18e2:	MUL	T2, #10
+18e5:	MOVUB	ACCU, current_char + 0
+18e9:	ADD	ACCU, #$FFD0
+18ed:	ADD	T2, ACCU
+18ef:	MOV	number + 0, T2
+18f3:	CALL	next_char + 0
+18f6:	MOVUB	P0, current_char + 0
+18fa:	CALL	isdigit + 0
+18fd:	BNE	$18D5
+18ff:	MOV	ACCU, T0
+1901:	CMPS	ACCU, #$0002
+1904:	BLT	$1919
+1906:	MOV	ACCU, T0
+1908:	SHL	ACCU, #1
+190a:	MOV	T2, array + 0
+190e:	ADD	T2, ACCU
+1910:	MOV	T3, number + 0
+1914:	MOV	ADDR, T2
+1916:	MOV	0(ADDR), T3
+1919:	MOVUB	P0, current_char + 0
+191d:	ADD	T0, #$0001
+1921:	JUMP	$18C1
+1923:	POP	#$0002
+1926:	RETURN	0, 2
+--------------------------------------------------------------------
+token:
+2fd0 : __ __ __ BSS	1
+--------------------------------------------------------------------
+malloc:
+192a:	ENTER	0, 2
+192e:	MOV	ACCU, P0
+1930:	MOV	T0, ACCU
+1932:	ADD	T0, #$0007
+1936:	ANDB	T0, #$00FC
+1939:	MOV	ACCU, T0
+193b:	MOV	P0, ACCU
+193d:	MOVUB	ACCU, freeHeapInit + 0
+1941:	BNE	$1964
+1943:	LEA	T0, $2fd7
+1947:	MOV	freeHeap + 0, T0
+194b:	LEA	T2, $0000
+194f:	MOV	$2fd9, T2
+1953:	LEA	ACCU, $9000
+1957:	SUB	ACCU, T0
+1959:	MOV	$2fd7, ACCU
+195d:	MOV	ACCU, #1
+1960:	MOVB	freeHeapInit + 0, ACCU
+1964:	MOV	T0, freeHeap + 0
+1968:	MOV	ACCU, T0
+196a:	BNE	$1974
+196c:	LEA	ACCU, $0000
+1970:	RETURN	0, 2
+1974:	LEA	T2, $0000
+1978:	MOV	ACCU, P0
+197a:	MOV	T3, ACCU
+197c:	MOV	ADDR, T0
+197e:	MOV	T4, 0(ADDR)
+1981:	MOV	ACCU, T4
+1983:	CMPU	ACCU, T3
+1985:	BGT	$19EF
+1987:	MOV	ACCU, T0
+1989:	MOV	T5, ACCU
+198b:	MOV	ACCU, T4
+198d:	CMPU	ACCU, T3
+198f:	BNE	$19B1
+1991:	MOV	T0, 2(ADDR)
+1994:	MOV	ACCU, T5
+1996:	ADD	ACCU, #$0002
+199a:	MOV	T3, ACCU
+199c:	MOV	ACCU, T2
+199e:	BNE	$19A8
+19a0:	MOV	freeHeap + 0, T0
+19a4:	MOV	ACCU, T3
+19a6:	JUMP	$1970
+19a8:	MOV	ADDR, T2
+19aa:	MOV	2(ADDR), T0
+19ad:	MOV	ACCU, T3
+19af:	JUMP	$1970
+19b1:	MOV	ACCU, T3
+19b3:	ADD	T5, ACCU
+19b5:	MOV	ACCU, T4
+19b7:	SUB	ACCU, T3
+19b9:	MOV	ADDR, T5
+19bb:	MOV	0(ADDR), ACCU
+19be:	MOV	ADDR, T0
+19c0:	MOV	T4, 2(ADDR)
+19c3:	MOV	ADDR, T5
+19c5:	MOV	2(ADDR), T4
+19c8:	MOV	ACCU, T0
+19ca:	MOV	T4, ACCU
+19cc:	ADD	T4, #$0002
+19d0:	MOV	ACCU, T2
+19d2:	BNE	$19E1
+19d4:	MOV	freeHeap + 0, T5
+19d8:	MOV	ADDR, T0
+19da:	MOV	0(ADDR), T3
+19dd:	MOV	ACCU, T4
+19df:	JUMP	$1970
+19e1:	MOV	ADDR, T2
+19e3:	MOV	2(ADDR), T5
+19e6:	MOV	ADDR, T0
+19e8:	MOV	0(ADDR), T3
+19eb:	MOV	ACCU, T4
+19ed:	JUMP	$1970
+19ef:	MOV	ACCU, T0
+19f1:	MOV	T0, 2(ADDR)
+19f4:	MOV	T2, ACCU
+19f6:	MOV	ACCU, T0
+19f8:	BNE	$197C
+19fa:	JUMPF	$196C
+--------------------------------------------------------------------
+freeHeapInit:
+2ed4 : __ __ __ BYT 00                                              : .
+--------------------------------------------------------------------
+freeHeap:
+2fd1 : __ __ __ BSS	2
+--------------------------------------------------------------------
+array:
+2fd3 : __ __ __ BSS	2
+--------------------------------------------------------------------
+number:
+2fd5 : __ __ __ BSS	2
+--------------------------------------------------------------------
+make_token:
+19fd:	ENTER	0, 2
+1a01:	PUSH	#$0002
+1a04:	CALL	next_char + 0
+1a07:	MOVB	token + 0, P0
+1a0b:	POP	#$0002
+1a0e:	RETURN	0, 2
+--------------------------------------------------------------------
+1a12 : __ __ __ BYT 49 4c 4c 45 47 41 4c 20 43 48 41 52 20 25 63 20 : ILLEGAL CHAR %c 
+1a22 : __ __ __ BYT 28 48 45 58 20 25 78 29 0a 00                   : (HEX %x)..
+--------------------------------------------------------------------
+parse_arith_expr:
+1a2c:	ENTER	0, 2
+1a30:	PUSH	#$0006
+1a33:	MOV	ACCU, #1
+1a36:	MOVB	4(SP), ACCU
+1a39:	MOV	ACCU, #2
+1a3c:	MOVB	5(SP), ACCU
+1a3f:	MOV	T0, #$1b0b
+1a43:	MOV	2(SP), T0
+1a46:	CALL	parse_expressions + 0
+1a49:	POP	#$0006
+1a4c:	RETURN	0, 2
+--------------------------------------------------------------------
+parse_expressions:
+1a50:	ENTER	5, 7
+1a54:	PUSH	#$0002
+1a57:	MOV	T2, 2(FP)
+1a5a:	MOV	ADDR, T2
+1a5c:	CALL	ADDR
+1a5d:	MOV	T3, ACCU
+1a5f:	MOVB	T4, token + 0
+1a63:	MOVB	T5, 4(FP)
+1a66:	MOVB	ACCU, T5
+1a68:	CMPUB	ACCU, T4
+1a6a:	BNE	$1A9E
+1a6c:	MOV	ACCU, T2
+1a6e:	MOV	T0, ACCU
+1a70:	MOVB	ACCU, T5
+1a72:	MOVB	T1, ACCU
+1a74:	MOV	ACCU, T3
+1a76:	MOV	P3, ACCU
+1a78:	MOVB	P2, token + 0
+1a7c:	LEA	P5, $0000
+1a80:	CALL	NewTree + 0
+1a83:	MOV	T2, ACCU
+1a85:	CALL	next_token + 0
+1a88:	MOV	ADDR, T0
+1a8a:	CALL	ADDR
+1a8b:	MOV	ADDR, T2
+1a8d:	MOV	3(ADDR), ACCU
+1a90:	MOV	ACCU, T2
+1a92:	MOV	T3, ACCU
+1a94:	MOVB	T4, token + 0
+1a98:	MOVB	ACCU, T1
+1a9a:	CMPUB	ACCU, T4
+1a9c:	BEQ	$1A74
+1a9e:	MOVB	T4, token + 0
+1aa2:	MOVUB	ACCU, 5(FP)
+1aa5:	CMPUB	ACCU, T4
+1aa7:	BEQ	$1A74
+1aa9:	MOV	ACCU, T3
+1aab:	POP	#$0002
+1aae:	RETURN	5, 7
+--------------------------------------------------------------------
+NewTree:
+1ab2:	ENTER	0, 2
+1ab6:	PUSH	#$0002
+1ab9:	MOV	P0, #5
+1abc:	CALL	malloc + 0
+1abf:	MOV	T0, ACCU
+1ac1:	LEA	ACCU, $0000
+1ac5:	CMPU	ACCU, T0
+1ac7:	BNE	$1ACF
+1ac9:	MOV	P0, #1
+1acc:	CALL	exit + 0
+1acf:	MOVB	ACCU, P2
+1ad1:	MOVB	T2, ACCU
+1ad3:	MOV	ADDR, T0
+1ad5:	MOVB	0(ADDR), T2
+1ad8:	MOV	ACCU, P3
+1ada:	MOV	1(ADDR), ACCU
+1add:	MOV	ACCU, P5
+1adf:	MOV	3(ADDR), ACCU
+1ae2:	MOV	ACCU, T0
+1ae4:	POP	#$0002
+1ae7:	RETURN	0, 2
+--------------------------------------------------------------------
+exit:
+1aeb:	ENTER	0, 2
+1aef:	JSR	$1af6
+1af2:	RETURN	0, 2
+--------------------------------------------------------------------
+1af6 : a5 0d __ LDA P0 
+1af8 : 85 1b __ STA ACCU + 0 
+1afa : a5 0e __ LDA P1 
+1afc : 85 1c __ STA ACCU + 1 
+1afe : ae b4 2e LDX $2eb4 ; (spentry + 0)
+1b01 : 9a __ __ TXS
+1b02 : a9 4c __ LDA #$4c
+1b04 : 85 54 __ STA $54 
+1b06 : a9 00 __ LDA #$00
+1b08 : 85 13 __ STA P6 
+1b0a : 60 __ __ RTS
+--------------------------------------------------------------------
+parse_term:
+1b0b:	ENTER	0, 2
+1b0f:	PUSH	#$0006
+1b12:	MOV	ACCU, #3
+1b15:	MOVB	4(SP), ACCU
+1b18:	MOV	ACCU, #4
+1b1b:	MOVB	5(SP), ACCU
+1b1e:	MOV	T0, #$1b2f
+1b22:	MOV	2(SP), T0
+1b25:	CALL	parse_expressions + 0
+1b28:	POP	#$0006
+1b2b:	RETURN	0, 2
+--------------------------------------------------------------------
+parse_factor:
+1b2f:	ENTER	2, 4
+1b33:	PUSH	#$0004
+1b36:	MOVB	T0, token + 0
+1b3a:	MOVB	ACCU, T0
+1b3c:	CMPUB	ACCU, #$0005
+1b3e:	BEQ	$1B6E
+1b40:	MOVB	ACCU, T0
+1b42:	BNE	$1B4E
+1b44:	CALL	parse_leaf + 0
+1b47:	POP	#$0004
+1b4a:	RETURN	2, 4
+1b4e:	LEA	T2, $1d30
+1b52:	MOV	2(SP), T2
+1b55:	CALL	printf + 0
+1b58:	MOVB	T0, token + 0
+1b5c:	MOVB	2(SP), T0
+1b5f:	CALL	print_token + 0
+1b62:	LEA	T2, $1d41
+1b66:	MOV	2(SP), T2
+1b69:	CALL	printf + 0
+1b6c:	JUMP	$1B6C
+1b6e:	CALL	next_token + 0
+1b71:	CALL	parse_arith_expr + 0
+1b74:	MOV	T2, ACCU
+1b76:	MOVUB	ACCU, token + 0
+1b7a:	CMPUB	ACCU, #$0006
+1b7c:	BNE	$1B85
+1b7e:	CALL	next_token + 0
+1b81:	MOV	ACCU, T2
+1b83:	JUMP	$1B47
+1b85:	LEA	T2, $1ba5
+1b89:	MOV	2(SP), T2
+1b8c:	CALL	printf + 0
+1b8f:	MOVB	T0, token + 0
+1b93:	MOVB	2(SP), T0
+1b96:	CALL	print_token + 0
+1b99:	LEA	T2, $1ccf
+1b9d:	MOV	2(SP), T2
+1ba0:	CALL	printf + 0
+1ba3:	JUMP	$1BA3
+--------------------------------------------------------------------
+1ba5 : __ __ __ BYT 45 58 50 54 45 43 54 45 44 20 22 29 22 20 49 4e : EXPTECTED ")" IN
+1bb5 : __ __ __ BYT 20 46 41 43 54 4f 52 20 42 55 54 20 46 4f 55 4e :  FACTOR BUT FOUN
+1bc5 : __ __ __ BYT 44 20 00                                        : D .
+--------------------------------------------------------------------
+print_token:
+1bc8:	ENTER	0, 2
+1bcc:	PUSH	#$000A
+1bcf:	MOVB	T0, 2(FP)
+1bd2:	MOVB	ACCU, T0
+1bd4:	CMPUB	ACCU, #$0004
+1bd6:	BEQF	$1C92
+1bd9:	MOVB	ACCU, T0
+1bdb:	MOV	T2, ACCU
+1bdd:	CMPUB	ACCU, #$0004
+1bdf:	BLE	$1C5E
+1be1:	MOVB	ACCU, T0
+1be3:	BEQ	$1C2F
+1be5:	MOVB	ACCU, T0
+1be7:	CMPUB	ACCU, #$0001
+1be9:	BEQ	$1C24
+1beb:	MOVB	ACCU, T0
+1bed:	CMPUB	ACCU, #$0002
+1bef:	BEQ	$1C19
+1bf1:	MOVB	ACCU, T0
+1bf3:	CMPUB	ACCU, #$0003
+1bf5:	BNE	$1C0A
+1bf7:	MOVB	P0, #32
+1bfa:	CALL	putchar + 0
+1bfd:	MOVB	P0, #42
+1c00:	CALL	putchar + 0
+1c03:	POP	#$000A
+1c06:	RETURN	0, 2
+1c0a:	MOV	4(SP), T2
+1c0d:	LEA	T2, $1cbd
+1c11:	MOV	2(SP), T2
+1c14:	CALL	printf + 0
+1c17:	JUMP	$1C03
+1c19:	MOVB	P0, #32
+1c1c:	CALL	putchar + 0
+1c1f:	MOVB	P0, #45
+1c22:	JUMP	$1C00
+1c24:	MOVB	P0, #32
+1c27:	CALL	putchar + 0
+1c2a:	MOVB	P0, #43
+1c2d:	JUMP	$1C00
+1c2f:	LEA	T2, $1c9e
+1c33:	MOV	2(SP), T2
+1c36:	MOV	T2, number + 0
+1c3a:	MOV	4(SP), T2
+1c3d:	CALL	printf + 0
+1c40:	LEA	T2, $1ca2
+1c44:	MOV	2(SP), T2
+1c47:	MOV	ADDR, array + 0
+1c4a:	MOV	T3, 4(ADDR)
+1c4d:	MOV	8(SP), T3
+1c50:	MOV	T3, 2(ADDR)
+1c53:	MOV	T2, 0(ADDR)
+1c56:	MOV	6(SP), T3
+1c59:	MOV	4(SP), T2
+1c5c:	JUMP	$1C14
+1c5e:	MOVB	ACCU, T0
+1c60:	CMPUB	ACCU, #$0005
+1c62:	BNE	$1C6F
+1c64:	MOVB	P0, #32
+1c67:	CALL	putchar + 0
+1c6a:	MOVB	P0, #40
+1c6d:	JUMP	$1C00
+1c6f:	MOVB	ACCU, T0
+1c71:	CMPUB	ACCU, #$0006
+1c73:	BNE	$1C80
+1c75:	MOVB	P0, #32
+1c78:	CALL	putchar + 0
+1c7b:	MOVB	P0, #41
+1c7e:	JUMP	$1C00
+1c80:	MOVB	ACCU, T0
+1c82:	CMPUB	ACCU, #$0007
+1c84:	BNE	$1C0A
+1c86:	MOVB	P0, #32
+1c89:	CALL	putchar + 0
+1c8c:	MOVB	P0, #46
+1c8f:	JUMPF	$1C00
+1c92:	MOVB	P0, #32
+1c95:	CALL	putchar + 0
+1c98:	MOVB	P0, #47
+1c9b:	JUMPF	$1C00
+--------------------------------------------------------------------
+1c9e : __ __ __ BYT 20 25 64 00                                     :  %d.
+--------------------------------------------------------------------
+1ca2 : __ __ __ BYT 20 25 64 20 25 64 20 25 64 20 00                :  %d %d %d .
+--------------------------------------------------------------------
+putchar:
+1cad:	ENTER	0, 2
+1cb1:	JSR	$1cb8
+1cb4:	RETURN	0, 2
+--------------------------------------------------------------------
+1cb8 : a5 0d __ LDA P0 
+1cba : 4c 46 10 JMP $1046 ; (putpch + 0)
+--------------------------------------------------------------------
+1cbd : __ __ __ BYT 55 4e 44 45 46 49 4e 45 44 20 54 4f 4b 45 4e 25 : UNDEFINED TOKEN%
+1ccd : __ __ __ BYT 64 00                                           : d.
+--------------------------------------------------------------------
+1ccf : __ __ __ BYT 0a 00                                           : ..
+--------------------------------------------------------------------
+parse_leaf:
+1cd1:	ENTER	2, 4
+1cd5:	PUSH	#$0002
+1cd8:	MOV	P2, number + 0
+1cdc:	MOV	P4, array + 0
+1ce0:	CALL	NewLeaf + 0
+1ce3:	MOV	T0, ACCU
+1ce5:	CALL	next_token + 0
+1ce8:	MOV	ACCU, T0
+1cea:	POP	#$0002
+1ced:	RETURN	2, 4
+--------------------------------------------------------------------
+NewLeaf:
+1cf1:	ENTER	0, 2
+1cf5:	PUSH	#$0002
+1cf8:	MOV	P0, #5
+1cfb:	CALL	malloc + 0
+1cfe:	MOV	T0, ACCU
+1d00:	LEA	ACCU, $0000
+1d04:	CMPU	ACCU, T0
+1d06:	BNE	$1D0E
+1d08:	MOV	P0, #1
+1d0b:	CALL	exit + 0
+1d0e:	MOV	ACCU, #0
+1d11:	MOV	ADDR, T0
+1d13:	MOVB	0(ADDR), ACCU
+1d16:	MOV	T1, number + 0
+1d1a:	MOV	ADDR, T0
+1d1c:	MOV	1(ADDR), T1
+1d1f:	MOV	1(ADDR), T1
+1d22:	MOV	ACCU, P4
+1d24:	MOV	1(ADDR), ACCU
+1d27:	MOV	ACCU, T0
+1d29:	POP	#$0002
+1d2c:	RETURN	0, 2
+--------------------------------------------------------------------
+1d30 : __ __ __ BYT 55 4e 45 50 45 43 54 45 44 20 46 41 43 54 4f 52 : UNEPECTED FACTOR
+1d40 : __ __ __ BYT 00                                              : .
+--------------------------------------------------------------------
+1d41 : __ __ __ BYT 0a 00                                           : ..
+--------------------------------------------------------------------
+1d43 : __ __ __ BYT 55 4e 45 58 50 45 43 54 45 44 20 54 4f 4b 45 4e : UNEXPECTED TOKEN
+1d53 : __ __ __ BYT 20 41 54 20 45 4e 44 20 4f 46 20 49 4e 50 55 54 :  AT END OF INPUT
+1d63 : __ __ __ BYT 3a 20 00                                        : : .
+--------------------------------------------------------------------
+1d66 : __ __ __ BYT 57 48 49 4c 45 31 0a 00                         : WHILE1..
+--------------------------------------------------------------------
+eval2:
+1d6e:	ENTER	4, 6
+1d72:	PUSH	#$0004
+1d75:	MOV	T0, 2(FP)
+1d78:	MOV	ADDR, T0
+1d7a:	MOVB	T1, 0(ADDR)
+1d7d:	MOVB	ACCU, T1
+1d7f:	BNE	$1D8B
+1d81:	MOV	ACCU, 1(ADDR)
+1d84:	POP	#$0004
+1d87:	RETURN	4, 6
+1d8b:	MOVB	ACCU, T1
+1d8d:	CMPUB	ACCU, #$0001
+1d8f:	BNE	$1DB6
+1d91:	MOV	T3, 1(ADDR)
+1d94:	MOV	2(SP), T3
+1d97:	CALL	eval2 + 0
+1d9a:	MOV	ADDR, T0
+1d9c:	MOV	T0, 3(ADDR)
+1d9f:	MOV	T3, ACCU
+1da1:	MOV	2(SP), T0
+1da4:	CALL	eval2 + 0
+1da7:	MOV	T0, ACCU
+1da9:	MOV	ACCU, T3
+1dab:	MOV	P2, ACCU
+1dad:	MOV	ACCU, T0
+1daf:	MOV	P4, ACCU
+1db1:	CALL	arsum + 0
+1db4:	JUMP	$1D84
+1db6:	MOVB	ACCU, T1
+1db8:	CMPUB	ACCU, #$0003
+1dba:	BNE	$1DE1
+1dbc:	MOV	T3, 1(ADDR)
+1dbf:	MOV	2(SP), T3
+1dc2:	CALL	eval2 + 0
+1dc5:	MOV	ADDR, T0
+1dc7:	MOV	T0, 3(ADDR)
+1dca:	MOV	T3, ACCU
+1dcc:	MOV	2(SP), T0
+1dcf:	CALL	eval2 + 0
+1dd2:	MOV	T0, ACCU
+1dd4:	MOV	ACCU, T3
+1dd6:	MOV	P2, ACCU
+1dd8:	MOV	ACCU, T0
+1dda:	MOV	P4, ACCU
+1ddc:	CALL	artimes + 0
+1ddf:	JUMP	$1D84
+1de1:	MOVB	ACCU, T1
+1de3:	CMPUB	ACCU, #$0004
+1de5:	BEQ	$1DFD
+1de7:	MOV	2(SP), T0
+1dea:	CALL	print_tree + 0
+1ded:	LEA	T0, $1fed
+1df1:	MOV	2(SP), T0
+1df4:	CALL	printf + 0
+1df7:	LEA	ACCU, $0000
+1dfb:	JUMP	$1D84
+1dfd:	MOV	T3, 1(ADDR)
+1e00:	MOV	2(SP), T3
+1e03:	CALL	eval2 + 0
+1e06:	MOV	ADDR, T0
+1e08:	MOV	T0, 3(ADDR)
+1e0b:	MOV	T3, ACCU
+1e0d:	MOV	2(SP), T0
+1e10:	CALL	eval2 + 0
+1e13:	MOV	T0, ACCU
+1e15:	MOV	ACCU, T3
+1e17:	MOV	P2, ACCU
+1e19:	MOV	ACCU, T0
+1e1b:	MOV	P4, ACCU
+1e1d:	CALL	ardivide + 0
+1e20:	JUMPF	$1D84
+--------------------------------------------------------------------
+arsum:
+1e23:	ENTER	0, 2
+1e27:	PUSH	#$0002
+1e2a:	MOV	P0, #6
+1e2d:	CALL	malloc + 0
+1e30:	MOV	T0, ACCU
+1e32:	MOV	T1, ACCU
+1e34:	MOV	T2, #0
+1e37:	MOV	ACCU, P4
+1e39:	MOV	T3, ACCU
+1e3b:	MOV	ACCU, P2
+1e3d:	MOV	T4, ACCU
+1e3f:	MOV	ADDR, T3
+1e41:	MOV	T5, 0(ADDR)
+1e44:	MOV	ADDR, T4
+1e46:	MOV	ACCU, 0(ADDR)
+1e49:	ADD	T5, ACCU
+1e4b:	MOV	ADDR, T1
+1e4d:	MOV	0(ADDR), T5
+1e50:	ADD	T3, #$0002
+1e54:	ADD	T4, #$0002
+1e58:	ADD	T1, #$0002
+1e5c:	ADD	T2, #$0001
+1e60:	MOVB	ACCU, T2
+1e62:	CMPUB	ACCU, #$0003
+1e64:	BGT	$1E3F
+1e66:	MOV	ACCU, T0
+1e68:	POP	#$0002
+1e6b:	RETURN	0, 2
+--------------------------------------------------------------------
+artimes:
+1e6f:	ENTER	0, 2
+1e73:	PUSH	#$0002
+1e76:	MOV	P0, #6
+1e79:	CALL	malloc + 0
+1e7c:	MOV	T0, ACCU
+1e7e:	MOV	T1, ACCU
+1e80:	MOV	T2, #0
+1e83:	MOV	ACCU, P4
+1e85:	MOV	T3, ACCU
+1e87:	MOV	ACCU, P2
+1e89:	MOV	T4, ACCU
+1e8b:	MOV	ADDR, T3
+1e8d:	MOV	T5, 0(ADDR)
+1e90:	MOV	ADDR, T4
+1e92:	MOV	ACCU, 0(ADDR)
+1e95:	MUL	ACCU, T5
+1e97:	MOV	ADDR, T1
+1e99:	MOV	0(ADDR), ACCU
+1e9c:	ADD	T3, #$0002
+1ea0:	ADD	T4, #$0002
+1ea4:	ADD	T1, #$0002
+1ea8:	ADD	T2, #$0001
+1eac:	MOVB	ACCU, T2
+1eae:	CMPUB	ACCU, #$0003
+1eb0:	BGT	$1E8B
+1eb2:	MOV	ACCU, T0
+1eb4:	POP	#$0002
+1eb7:	RETURN	0, 2
+--------------------------------------------------------------------
+ardivide:
+1ebb:	ENTER	0, 2
+1ebf:	PUSH	#$0002
+1ec2:	MOV	P0, #6
+1ec5:	CALL	malloc + 0
+1ec8:	MOV	T0, ACCU
+1eca:	MOV	T1, ACCU
+1ecc:	MOV	T2, #0
+1ecf:	MOV	ACCU, P4
+1ed1:	MOV	T3, ACCU
+1ed3:	MOV	ACCU, P2
+1ed5:	MOV	T4, ACCU
+1ed7:	MOV	ADDR, T3
+1ed9:	MOV	T5, 0(ADDR)
+1edc:	MOV	ADDR, T4
+1ede:	MOV	ACCU, 0(ADDR)
+1ee1:	DIVS	ACCU, T5
+1ee3:	MOV	ADDR, T1
+1ee5:	MOV	0(ADDR), ACCU
+1ee8:	ADD	T3, #$0002
+1eec:	ADD	T4, #$0002
+1ef0:	ADD	T1, #$0002
+1ef4:	ADD	T2, #$0001
+1ef8:	MOVB	ACCU, T2
+1efa:	CMPUB	ACCU, #$0003
+1efc:	BGT	$1ED7
+1efe:	MOV	ACCU, T0
+1f00:	POP	#$0002
+1f03:	RETURN	0, 2
+--------------------------------------------------------------------
+print_tree:
+1f07:	ENTER	0, 2
+1f0b:	PUSH	#$0006
+1f0e:	MOVB	P0, #10
+1f11:	CALL	putchar + 0
+1f14:	MOV	ACCU, #0
+1f17:	MOV	4(SP), ACCU
+1f1a:	MOV	T0, 2(FP)
+1f1d:	MOV	2(SP), T0
+1f20:	CALL	print_subtree + 0
+1f23:	POP	#$0006
+1f26:	RETURN	0, 2
+--------------------------------------------------------------------
+print_subtree:
+1f2a:	ENTER	4, 6
+1f2e:	PUSH	#$000A
+1f31:	MOV	T0, 4(FP)
+1f34:	MOV	ADDR, 2(FP)
+1f37:	MOVUB	ACCU, 0(ADDR)
+1f3a:	BEQ	$1F8C
+1f3c:	MOV	ACCU, T0
+1f3e:	CMPU	ACCU, #$0000
+1f41:	BEQ	$1F56
+1f43:	MOV	T1, #0
+1f46:	MOVB	P0, #32
+1f49:	CALL	putchar + 0
+1f4c:	ADD	T1, #$0001
+1f50:	MOV	ACCU, T0
+1f52:	CMPU	ACCU, T1
+1f54:	BNE	$1F46
+1f56:	MOV	T0, 2(FP)
+1f59:	MOV	ADDR, T0
+1f5b:	MOVB	T2, 0(ADDR)
+1f5e:	MOVB	2(SP), T2
+1f61:	CALL	print_token + 0
+1f64:	MOVB	P0, #10
+1f67:	CALL	putchar + 0
+1f6a:	MOV	ADDR, T0
+1f6c:	MOV	T1, 1(ADDR)
+1f6f:	MOV	2(SP), T1
+1f72:	MOV	T1, 4(FP)
+1f75:	ADD	T1, #$0002
+1f79:	MOV	4(SP), T1
+1f7c:	CALL	print_subtree + 0
+1f7f:	MOV	ADDR, T0
+1f81:	MOV	T0, 3(ADDR)
+1f84:	MOV	4(FP), T1
+1f87:	MOV	2(FP), T0
+1f8a:	JUMP	$1F31
+1f8c:	MOV	ACCU, T0
+1f8e:	CMPU	ACCU, #$0000
+1f91:	BEQ	$1FA6
+1f93:	MOV	T1, #0
+1f96:	MOVB	P0, #32
+1f99:	CALL	putchar + 0
+1f9c:	ADD	T1, #$0001
+1fa0:	MOV	ACCU, T0
+1fa2:	CMPU	ACCU, T1
+1fa4:	BNE	$1F96
+1fa6:	LEA	T0, $1fe1
+1faa:	MOV	2(SP), T0
+1fad:	MOV	T0, 2(FP)
+1fb0:	MOV	ADDR, T0
+1fb2:	MOV	T1, 1(ADDR)
+1fb5:	MOV	ADDR, T1
+1fb7:	MOV	T1, 0(ADDR)
+1fba:	MOV	4(SP), T1
+1fbd:	MOV	ADDR, T0
+1fbf:	MOV	T1, 1(ADDR)
+1fc2:	MOV	ADDR, T1
+1fc4:	MOV	T1, 2(ADDR)
+1fc7:	MOV	ADDR, T0
+1fc9:	MOV	T0, 1(ADDR)
+1fcc:	MOV	ADDR, T0
+1fce:	MOV	6(SP), T1
+1fd1:	MOV	T0, 4(ADDR)
+1fd4:	MOV	8(SP), T0
+1fd7:	CALL	printf + 0
+1fda:	POP	#$000A
+1fdd:	RETURN	4, 6
+--------------------------------------------------------------------
+1fe1 : __ __ __ BYT 20 25 64 20 25 64 20 25 64 20 0a 00             :  %d %d %d ..
+--------------------------------------------------------------------
+1fed : __ __ __ BYT 45 52 52 00                                     : ERR.
+--------------------------------------------------------------------
+1ff1 : __ __ __ BYT 20 20 25 64 20 25 64 20 25 64 20 0a 00          :   %d %d %d ..
+--------------------------------------------------------------------
+1ffe : __ __ __ BYT 32 20 33 20 34 2b 34 20 35 20 36 20 2a 20 32 20 : 2 3 4+4 5 6 * 2 
+200e : __ __ __ BYT 33 20 34 2e 00                                  : 3 4..
+--------------------------------------------------------------------
+2013 : __ __ __ BYT 20 25 73 0a 00                                  :  %s..
+--------------------------------------------------------------------
+2018 : __ __ __ BYT 20 20 25 64 20 25 64 20 25 64 20 0a 00          :   %d %d %d ..
+--------------------------------------------------------------------
+2025 : __ __ __ BYT 34 20 35 20 36 20 2b 20 32 20 35 20 31 30 20 2f : 4 5 6 + 2 5 10 /
+2035 : __ __ __ BYT 20 31 30 20 33 20 34 2e 00                      :  10 3 4..
+--------------------------------------------------------------------
+203e : __ __ __ BYT 20 25 73 0a 00                                  :  %s..
+--------------------------------------------------------------------
+2043 : __ __ __ BYT 20 20 25 64 20 25 64 20 25 64 20 0a 20 00       :   %d %d %d . .
+--------------------------------------------------------------------
+2051 : __ __ __ BYT 34 20 35 20 36 20 2a 20 32 20 35 20 31 30 20 2b : 4 5 6 * 2 5 10 +
+2061 : __ __ __ BYT 20 31 30 20 33 20 34 2e 00                      :  10 3 4..
+--------------------------------------------------------------------
+206a : __ __ __ BYT 25 73 0a 00                                     : %s..
+--------------------------------------------------------------------
+206e : __ __ __ BYT 20 20 25 64 20 25 64 20 25 64 20 0a 20 00       :   %d %d %d . .
+--------------------------------------------------------------------
+207c : __ __ __ BYT 34 20 35 20 36 20 2a 20 32 20 35 20 31 30 20 2a : 4 5 6 * 2 5 10 *
+208c : __ __ __ BYT 20 31 30 20 33 20 34 2e 00                      :  10 3 4..
+--------------------------------------------------------------------
+2095 : __ __ __ BYT 25 73 0a 00                                     : %s..
+--------------------------------------------------------------------
+2099 : __ __ __ BYT 20 20 25 64 20 25 64 20 25 64 20 0a 20 00       :   %d %d %d . .
+--------------------------------------------------------------------
+20a7 : __ __ __ BYT 32 20 33 20 34 20 2a 20 32 20 34 20 36 20 2f 20 : 2 3 4 * 2 4 6 / 
+20b7 : __ __ __ BYT 32 20 32 20 31 2e 00                            : 2 2 1..
+--------------------------------------------------------------------
+20be : __ __ __ BYT 25 73 0a 00                                     : %s..
+--------------------------------------------------------------------
+20c2 : __ __ __ BYT 20 20 25 64 20 25 64 20 25 64 20 0a 20 00       :   %d %d %d . .
+--------------------------------------------------------------------
+20d0 : __ __ __ BYT 32 20 33 20 34 20 2a 20 32 20 34 20 36 20 2f 20 : 2 3 4 * 2 4 6 / 
+20e0 : __ __ __ BYT 32 20 32 20 31 20 2b 20 33 20 32 20 31 20 2b 20 : 2 2 1 + 3 2 1 + 
+20f0 : __ __ __ BYT 31 20 32 20 33 2e 00                            : 1 2 3..
+--------------------------------------------------------------------
+20f7 : __ __ __ BYT 25 73 0a 00                                     : %s..
+--------------------------------------------------------------------
+20fb : __ __ __ BYT 20 20 25 64 20 25 64 20 25 64 20 0a 20 00       :   %d %d %d . .
+--------------------------------------------------------------------
+2109 : __ __ __ BYT 32 20 33 20 34 20 2a 20 32 20 34 20 36 20 2f 20 : 2 3 4 * 2 4 6 / 
+2119 : __ __ __ BYT 32 20 32 20 31 20 2b 20 33 20 32 20 31 20 2a 20 : 2 2 1 + 3 2 1 * 
+2129 : __ __ __ BYT 31 20 32 20 33 2e 00                            : 1 2 3..
+--------------------------------------------------------------------
+2130 : __ __ __ BYT 25 73 0a 00                                     : %s..
+--------------------------------------------------------------------
+2134 : __ __ __ BYT 20 20 25 64 20 25 64 20 25 64 20 0a 20 00       :   %d %d %d . .
+--------------------------------------------------------------------
+2142 : __ __ __ BYT 41 4c 4c 20 44 4f 4e 45 0a 00                   : ALL DONE..
+--------------------------------------------------------------------
+freg:
+214c : b1 19 __ LDA (IP + 0),y 
+214e : c8 __ __ INY
+214f : aa __ __ TAX
+2150 : b5 00 __ LDA $00,x 
+2152 : 85 03 __ STA WORK + 0 
+2154 : b5 01 __ LDA $01,x 
+2156 : 85 04 __ STA WORK + 1 
+2158 : b5 02 __ LDA $02,x 
+215a : 85 05 __ STA WORK + 2 
+215c : b5 03 __ LDA WORK + 0,x 
+215e : 85 06 __ STA WORK + 3 
+2160 : a5 05 __ LDA WORK + 2 
+2162 : 0a __ __ ASL
+2163 : a5 06 __ LDA WORK + 3 
+2165 : 2a __ __ ROL
+2166 : 85 08 __ STA WORK + 5 
+2168 : f0 06 __ BEQ $2170
+216a : a5 05 __ LDA WORK + 2 
+216c : 09 80 __ ORA #$80
+216e : 85 05 __ STA WORK + 2 
+2170 : a5 1d __ LDA ACCU + 2 
+2172 : 0a __ __ ASL
+2173 : a5 1e __ LDA ACCU + 3 
+2175 : 2a __ __ ROL
+2176 : 85 07 __ STA WORK + 4 
+2178 : f0 06 __ BEQ $2180
+217a : a5 1d __ LDA ACCU + 2 
+217c : 09 80 __ ORA #$80
+217e : 85 1d __ STA ACCU + 2 
+2180 : 60 __ __ RTS
+2181 : 06 1e __ ASL ACCU + 3 
+2183 : a5 07 __ LDA WORK + 4 
+2185 : 6a __ __ ROR
+2186 : 85 1e __ STA ACCU + 3 
+2188 : b0 06 __ BCS $2190
+218a : a5 1d __ LDA ACCU + 2 
+218c : 29 7f __ AND #$7f
+218e : 85 1d __ STA ACCU + 2 
+2190 : 60 __ __ RTS
+--------------------------------------------------------------------
+faddsub:
+2191 : a9 ff __ LDA #$ff
+2193 : c5 07 __ CMP WORK + 4 
+2195 : f0 04 __ BEQ $219b
+2197 : c5 08 __ CMP WORK + 5 
+2199 : d0 11 __ BNE $21ac
+219b : a5 1e __ LDA ACCU + 3 
+219d : 09 7f __ ORA #$7f
+219f : 85 1e __ STA ACCU + 3 
+21a1 : a9 80 __ LDA #$80
+21a3 : 85 1d __ STA ACCU + 2 
+21a5 : a9 00 __ LDA #$00
+21a7 : 85 1b __ STA ACCU + 0 
+21a9 : 85 1c __ STA ACCU + 1 
+21ab : 60 __ __ RTS
+21ac : 38 __ __ SEC
+21ad : a5 07 __ LDA WORK + 4 
+21af : e5 08 __ SBC WORK + 5 
+21b1 : f0 38 __ BEQ $21eb
+21b3 : aa __ __ TAX
+21b4 : b0 25 __ BCS $21db
+21b6 : e0 e9 __ CPX #$e9
+21b8 : b0 0e __ BCS $21c8
+21ba : a5 08 __ LDA WORK + 5 
+21bc : 85 07 __ STA WORK + 4 
+21be : a9 00 __ LDA #$00
+21c0 : 85 1b __ STA ACCU + 0 
+21c2 : 85 1c __ STA ACCU + 1 
+21c4 : 85 1d __ STA ACCU + 2 
+21c6 : f0 23 __ BEQ $21eb
+21c8 : a5 1d __ LDA ACCU + 2 
+21ca : 4a __ __ LSR
+21cb : 66 1c __ ROR ACCU + 1 
+21cd : 66 1b __ ROR ACCU + 0 
+21cf : e8 __ __ INX
+21d0 : d0 f8 __ BNE $21ca
+21d2 : 85 1d __ STA ACCU + 2 
+21d4 : a5 08 __ LDA WORK + 5 
+21d6 : 85 07 __ STA WORK + 4 
+21d8 : 4c eb 21 JMP $21eb ; (faddsub + 90)
+21db : e0 18 __ CPX #$18
+21dd : b0 33 __ BCS $2212
+21df : a5 05 __ LDA WORK + 2 
+21e1 : 4a __ __ LSR
+21e2 : 66 04 __ ROR WORK + 1 
+21e4 : 66 03 __ ROR WORK + 0 
+21e6 : ca __ __ DEX
+21e7 : d0 f8 __ BNE $21e1
+21e9 : 85 05 __ STA WORK + 2 
+21eb : a5 1e __ LDA ACCU + 3 
+21ed : 29 80 __ AND #$80
+21ef : 85 1e __ STA ACCU + 3 
+21f1 : 45 06 __ EOR WORK + 3 
+21f3 : 30 31 __ BMI $2226
+21f5 : 18 __ __ CLC
+21f6 : a5 1b __ LDA ACCU + 0 
+21f8 : 65 03 __ ADC WORK + 0 
+21fa : 85 1b __ STA ACCU + 0 
+21fc : a5 1c __ LDA ACCU + 1 
+21fe : 65 04 __ ADC WORK + 1 
+2200 : 85 1c __ STA ACCU + 1 
+2202 : a5 1d __ LDA ACCU + 2 
+2204 : 65 05 __ ADC WORK + 2 
+2206 : 85 1d __ STA ACCU + 2 
+2208 : 90 08 __ BCC $2212
+220a : 66 1d __ ROR ACCU + 2 
+220c : 66 1c __ ROR ACCU + 1 
+220e : 66 1b __ ROR ACCU + 0 
+2210 : e6 07 __ INC WORK + 4 
+2212 : a5 07 __ LDA WORK + 4 
+2214 : c9 ff __ CMP #$ff
+2216 : f0 83 __ BEQ $219b
+2218 : 4a __ __ LSR
+2219 : 05 1e __ ORA ACCU + 3 
+221b : 85 1e __ STA ACCU + 3 
+221d : b0 06 __ BCS $2225
+221f : a5 1d __ LDA ACCU + 2 
+2221 : 29 7f __ AND #$7f
+2223 : 85 1d __ STA ACCU + 2 
+2225 : 60 __ __ RTS
+2226 : 38 __ __ SEC
+2227 : a5 1b __ LDA ACCU + 0 
+2229 : e5 03 __ SBC WORK + 0 
+222b : 85 1b __ STA ACCU + 0 
+222d : a5 1c __ LDA ACCU + 1 
+222f : e5 04 __ SBC WORK + 1 
+2231 : 85 1c __ STA ACCU + 1 
+2233 : a5 1d __ LDA ACCU + 2 
+2235 : e5 05 __ SBC WORK + 2 
+2237 : 85 1d __ STA ACCU + 2 
+2239 : b0 19 __ BCS $2254
+223b : 38 __ __ SEC
+223c : a9 00 __ LDA #$00
+223e : e5 1b __ SBC ACCU + 0 
+2240 : 85 1b __ STA ACCU + 0 
+2242 : a9 00 __ LDA #$00
+2244 : e5 1c __ SBC ACCU + 1 
+2246 : 85 1c __ STA ACCU + 1 
+2248 : a9 00 __ LDA #$00
+224a : e5 1d __ SBC ACCU + 2 
+224c : 85 1d __ STA ACCU + 2 
+224e : a5 1e __ LDA ACCU + 3 
+2250 : 49 80 __ EOR #$80
+2252 : 85 1e __ STA ACCU + 3 
+2254 : a5 1d __ LDA ACCU + 2 
+2256 : 30 ba __ BMI $2212
+2258 : 05 1c __ ORA ACCU + 1 
+225a : 05 1b __ ORA ACCU + 0 
+225c : f0 0f __ BEQ $226d
+225e : c6 07 __ DEC WORK + 4 
+2260 : f0 0b __ BEQ $226d
+2262 : 06 1b __ ASL ACCU + 0 
+2264 : 26 1c __ ROL ACCU + 1 
+2266 : 26 1d __ ROL ACCU + 2 
+2268 : 10 f4 __ BPL $225e
+226a : 4c 12 22 JMP $2212 ; (faddsub + 129)
+226d : a9 00 __ LDA #$00
+226f : 85 1b __ STA ACCU + 0 
+2271 : 85 1c __ STA ACCU + 1 
+2273 : 85 1d __ STA ACCU + 2 
+2275 : 85 1e __ STA ACCU + 3 
+2277 : 60 __ __ RTS
+--------------------------------------------------------------------
+fmul:
+2278 : a5 1b __ LDA ACCU + 0 
+227a : 05 1c __ ORA ACCU + 1 
+227c : 05 1d __ ORA ACCU + 2 
+227e : d0 03 __ BNE $2283
+2280 : 85 1e __ STA ACCU + 3 
+2282 : 60 __ __ RTS
+2283 : a5 03 __ LDA WORK + 0 
+2285 : 05 04 __ ORA WORK + 1 
+2287 : 05 05 __ ORA WORK + 2 
+2289 : d0 09 __ BNE $2294
+228b : 85 1b __ STA ACCU + 0 
+228d : 85 1c __ STA ACCU + 1 
+228f : 85 1d __ STA ACCU + 2 
+2291 : 85 1e __ STA ACCU + 3 
+2293 : 60 __ __ RTS
+2294 : a5 1e __ LDA ACCU + 3 
+2296 : 45 06 __ EOR WORK + 3 
+2298 : 29 80 __ AND #$80
+229a : 85 1e __ STA ACCU + 3 
+229c : a9 ff __ LDA #$ff
+229e : c5 07 __ CMP WORK + 4 
+22a0 : f0 42 __ BEQ $22e4
+22a2 : c5 08 __ CMP WORK + 5 
+22a4 : f0 3e __ BEQ $22e4
+22a6 : a9 00 __ LDA #$00
+22a8 : 85 09 __ STA WORK + 6 
+22aa : 85 0a __ STA WORK + 7 
+22ac : 85 0b __ STA $0b 
+22ae : a4 1b __ LDY ACCU + 0 
+22b0 : a5 03 __ LDA WORK + 0 
+22b2 : d0 06 __ BNE $22ba
+22b4 : a5 04 __ LDA WORK + 1 
+22b6 : f0 0a __ BEQ $22c2
+22b8 : d0 05 __ BNE $22bf
+22ba : 20 19 23 JSR $2319 ; (fmul8 + 0)
+22bd : a5 04 __ LDA WORK + 1 
+22bf : 20 19 23 JSR $2319 ; (fmul8 + 0)
+22c2 : a5 05 __ LDA WORK + 2 
+22c4 : 20 19 23 JSR $2319 ; (fmul8 + 0)
+22c7 : 38 __ __ SEC
+22c8 : a5 0b __ LDA $0b 
+22ca : 30 06 __ BMI $22d2
+22cc : 06 09 __ ASL WORK + 6 
+22ce : 26 0a __ ROL WORK + 7 
+22d0 : 2a __ __ ROL
+22d1 : 18 __ __ CLC
+22d2 : 29 7f __ AND #$7f
+22d4 : 85 0b __ STA $0b 
+22d6 : a5 07 __ LDA WORK + 4 
+22d8 : 65 08 __ ADC WORK + 5 
+22da : 90 19 __ BCC $22f5
+22dc : e9 7f __ SBC #$7f
+22de : b0 04 __ BCS $22e4
+22e0 : c9 ff __ CMP #$ff
+22e2 : d0 15 __ BNE $22f9
+22e4 : a5 1e __ LDA ACCU + 3 
+22e6 : 09 7f __ ORA #$7f
+22e8 : 85 1e __ STA ACCU + 3 
+22ea : a9 80 __ LDA #$80
+22ec : 85 1d __ STA ACCU + 2 
+22ee : a9 00 __ LDA #$00
+22f0 : 85 1b __ STA ACCU + 0 
+22f2 : 85 1c __ STA ACCU + 1 
+22f4 : 60 __ __ RTS
+22f5 : e9 7e __ SBC #$7e
+22f7 : 90 15 __ BCC $230e
+22f9 : 4a __ __ LSR
+22fa : 05 1e __ ORA ACCU + 3 
+22fc : 85 1e __ STA ACCU + 3 
+22fe : a9 00 __ LDA #$00
+2300 : 6a __ __ ROR
+2301 : 05 0b __ ORA $0b 
+2303 : 85 1d __ STA ACCU + 2 
+2305 : a5 0a __ LDA WORK + 7 
+2307 : 85 1c __ STA ACCU + 1 
+2309 : a5 09 __ LDA WORK + 6 
+230b : 85 1b __ STA ACCU + 0 
+230d : 60 __ __ RTS
+230e : a9 00 __ LDA #$00
+2310 : 85 1b __ STA ACCU + 0 
+2312 : 85 1c __ STA ACCU + 1 
+2314 : 85 1d __ STA ACCU + 2 
+2316 : 85 1e __ STA ACCU + 3 
+2318 : 60 __ __ RTS
+--------------------------------------------------------------------
+fmul8:
+2319 : 38 __ __ SEC
+231a : 6a __ __ ROR
+231b : 90 1e __ BCC $233b
+231d : aa __ __ TAX
+231e : 18 __ __ CLC
+231f : 98 __ __ TYA
+2320 : 65 09 __ ADC WORK + 6 
+2322 : 85 09 __ STA WORK + 6 
+2324 : a5 0a __ LDA WORK + 7 
+2326 : 65 1c __ ADC ACCU + 1 
+2328 : 85 0a __ STA WORK + 7 
+232a : a5 0b __ LDA $0b 
+232c : 65 1d __ ADC ACCU + 2 
+232e : 6a __ __ ROR
+232f : 85 0b __ STA $0b 
+2331 : 8a __ __ TXA
+2332 : 66 0a __ ROR WORK + 7 
+2334 : 66 09 __ ROR WORK + 6 
+2336 : 4a __ __ LSR
+2337 : f0 0d __ BEQ $2346
+2339 : b0 e2 __ BCS $231d
+233b : 66 0b __ ROR $0b 
+233d : 66 0a __ ROR WORK + 7 
+233f : 66 09 __ ROR WORK + 6 
+2341 : 4a __ __ LSR
+2342 : 90 f7 __ BCC $233b
+2344 : d0 d7 __ BNE $231d
+2346 : 60 __ __ RTS
+--------------------------------------------------------------------
+fdiv:
+2347 : a5 1b __ LDA ACCU + 0 
+2349 : 05 1c __ ORA ACCU + 1 
+234b : 05 1d __ ORA ACCU + 2 
+234d : d0 03 __ BNE $2352
+234f : 85 1e __ STA ACCU + 3 
+2351 : 60 __ __ RTS
+2352 : a5 1e __ LDA ACCU + 3 
+2354 : 45 06 __ EOR WORK + 3 
+2356 : 29 80 __ AND #$80
+2358 : 85 1e __ STA ACCU + 3 
+235a : a5 08 __ LDA WORK + 5 
+235c : f0 62 __ BEQ $23c0
+235e : a5 07 __ LDA WORK + 4 
+2360 : c9 ff __ CMP #$ff
+2362 : f0 5c __ BEQ $23c0
+2364 : a9 00 __ LDA #$00
+2366 : 85 09 __ STA WORK + 6 
+2368 : 85 0a __ STA WORK + 7 
+236a : 85 0b __ STA $0b 
+236c : a2 18 __ LDX #$18
+236e : a5 1b __ LDA ACCU + 0 
+2370 : c5 03 __ CMP WORK + 0 
+2372 : a5 1c __ LDA ACCU + 1 
+2374 : e5 04 __ SBC WORK + 1 
+2376 : a5 1d __ LDA ACCU + 2 
+2378 : e5 05 __ SBC WORK + 2 
+237a : 90 13 __ BCC $238f
+237c : a5 1b __ LDA ACCU + 0 
+237e : e5 03 __ SBC WORK + 0 
+2380 : 85 1b __ STA ACCU + 0 
+2382 : a5 1c __ LDA ACCU + 1 
+2384 : e5 04 __ SBC WORK + 1 
+2386 : 85 1c __ STA ACCU + 1 
+2388 : a5 1d __ LDA ACCU + 2 
+238a : e5 05 __ SBC WORK + 2 
+238c : 85 1d __ STA ACCU + 2 
+238e : 38 __ __ SEC
+238f : 26 09 __ ROL WORK + 6 
+2391 : 26 0a __ ROL WORK + 7 
+2393 : 26 0b __ ROL $0b 
+2395 : ca __ __ DEX
+2396 : f0 0a __ BEQ $23a2
+2398 : 06 1b __ ASL ACCU + 0 
+239a : 26 1c __ ROL ACCU + 1 
+239c : 26 1d __ ROL ACCU + 2 
+239e : b0 dc __ BCS $237c
+23a0 : 90 cc __ BCC $236e
+23a2 : 38 __ __ SEC
+23a3 : a5 0b __ LDA $0b 
+23a5 : 30 06 __ BMI $23ad
+23a7 : 06 09 __ ASL WORK + 6 
+23a9 : 26 0a __ ROL WORK + 7 
+23ab : 2a __ __ ROL
+23ac : 18 __ __ CLC
+23ad : 29 7f __ AND #$7f
+23af : 85 0b __ STA $0b 
+23b1 : a5 07 __ LDA WORK + 4 
+23b3 : e5 08 __ SBC WORK + 5 
+23b5 : 90 1a __ BCC $23d1
+23b7 : 18 __ __ CLC
+23b8 : 69 7f __ ADC #$7f
+23ba : b0 04 __ BCS $23c0
+23bc : c9 ff __ CMP #$ff
+23be : d0 15 __ BNE $23d5
+23c0 : a5 1e __ LDA ACCU + 3 
+23c2 : 09 7f __ ORA #$7f
+23c4 : 85 1e __ STA ACCU + 3 
+23c6 : a9 80 __ LDA #$80
+23c8 : 85 1d __ STA ACCU + 2 
+23ca : a9 00 __ LDA #$00
+23cc : 85 1c __ STA ACCU + 1 
+23ce : 85 1b __ STA ACCU + 0 
+23d0 : 60 __ __ RTS
+23d1 : 69 7f __ ADC #$7f
+23d3 : 90 15 __ BCC $23ea
+23d5 : 4a __ __ LSR
+23d6 : 05 1e __ ORA ACCU + 3 
+23d8 : 85 1e __ STA ACCU + 3 
+23da : a9 00 __ LDA #$00
+23dc : 6a __ __ ROR
+23dd : 05 0b __ ORA $0b 
+23df : 85 1d __ STA ACCU + 2 
+23e1 : a5 0a __ LDA WORK + 7 
+23e3 : 85 1c __ STA ACCU + 1 
+23e5 : a5 09 __ LDA WORK + 6 
+23e7 : 85 1b __ STA ACCU + 0 
+23e9 : 60 __ __ RTS
+23ea : a9 00 __ LDA #$00
+23ec : 85 1e __ STA ACCU + 3 
+23ee : 85 1d __ STA ACCU + 2 
+23f0 : 85 1c __ STA ACCU + 1 
+23f2 : 85 1b __ STA ACCU + 0 
+23f4 : 60 __ __ RTS
+--------------------------------------------------------------------
+negaccu:
+23f5 : 38 __ __ SEC
+23f6 : a9 00 __ LDA #$00
+23f8 : e5 1b __ SBC ACCU + 0 
+23fa : 85 1b __ STA ACCU + 0 
+23fc : a9 00 __ LDA #$00
+23fe : e5 1c __ SBC ACCU + 1 
+2400 : 85 1c __ STA ACCU + 1 
+2402 : 60 __ __ RTS
+--------------------------------------------------------------------
+negtmp:
+2403 : 38 __ __ SEC
+2404 : a9 00 __ LDA #$00
+2406 : e5 03 __ SBC WORK + 0 
+2408 : 85 03 __ STA WORK + 0 
+240a : a9 00 __ LDA #$00
+240c : e5 04 __ SBC WORK + 1 
+240e : 85 04 __ STA WORK + 1 
+2410 : 60 __ __ RTS
+--------------------------------------------------------------------
+divmod:
+2411 : a5 1c __ LDA ACCU + 1 
+2413 : d0 31 __ BNE $2446
+2415 : a5 04 __ LDA WORK + 1 
+2417 : d0 1e __ BNE $2437
+2419 : 85 06 __ STA WORK + 3 
+241b : a2 04 __ LDX #$04
+241d : 06 1b __ ASL ACCU + 0 
+241f : 2a __ __ ROL
+2420 : c5 03 __ CMP WORK + 0 
+2422 : 90 02 __ BCC $2426
+2424 : e5 03 __ SBC WORK + 0 
+2426 : 26 1b __ ROL ACCU + 0 
+2428 : 2a __ __ ROL
+2429 : c5 03 __ CMP WORK + 0 
+242b : 90 02 __ BCC $242f
+242d : e5 03 __ SBC WORK + 0 
+242f : 26 1b __ ROL ACCU + 0 
+2431 : ca __ __ DEX
+2432 : d0 eb __ BNE $241f
+2434 : 85 05 __ STA WORK + 2 
+2436 : 60 __ __ RTS
+2437 : a5 1b __ LDA ACCU + 0 
+2439 : 85 05 __ STA WORK + 2 
+243b : a5 1c __ LDA ACCU + 1 
+243d : 85 06 __ STA WORK + 3 
+243f : a9 00 __ LDA #$00
+2441 : 85 1b __ STA ACCU + 0 
+2443 : 85 1c __ STA ACCU + 1 
+2445 : 60 __ __ RTS
+2446 : a5 04 __ LDA WORK + 1 
+2448 : d0 1f __ BNE $2469
+244a : a5 03 __ LDA WORK + 0 
+244c : 30 1b __ BMI $2469
+244e : a9 00 __ LDA #$00
+2450 : 85 06 __ STA WORK + 3 
+2452 : a2 10 __ LDX #$10
+2454 : 06 1b __ ASL ACCU + 0 
+2456 : 26 1c __ ROL ACCU + 1 
+2458 : 2a __ __ ROL
+2459 : c5 03 __ CMP WORK + 0 
+245b : 90 02 __ BCC $245f
+245d : e5 03 __ SBC WORK + 0 
+245f : 26 1b __ ROL ACCU + 0 
+2461 : 26 1c __ ROL ACCU + 1 
+2463 : ca __ __ DEX
+2464 : d0 f2 __ BNE $2458
+2466 : 85 05 __ STA WORK + 2 
+2468 : 60 __ __ RTS
+2469 : a9 00 __ LDA #$00
+246b : 85 05 __ STA WORK + 2 
+246d : 85 06 __ STA WORK + 3 
+246f : 84 02 __ STY $02 
+2471 : a0 10 __ LDY #$10
+2473 : 18 __ __ CLC
+2474 : 26 1b __ ROL ACCU + 0 
+2476 : 26 1c __ ROL ACCU + 1 
+2478 : 26 05 __ ROL WORK + 2 
+247a : 26 06 __ ROL WORK + 3 
+247c : 38 __ __ SEC
+247d : a5 05 __ LDA WORK + 2 
+247f : e5 03 __ SBC WORK + 0 
+2481 : aa __ __ TAX
+2482 : a5 06 __ LDA WORK + 3 
+2484 : e5 04 __ SBC WORK + 1 
+2486 : 90 04 __ BCC $248c
+2488 : 86 05 __ STX WORK + 2 
+248a : 85 06 __ STA WORK + 3 
+248c : 88 __ __ DEY
+248d : d0 e5 __ BNE $2474
+248f : 26 1b __ ROL ACCU + 0 
+2491 : 26 1c __ ROL ACCU + 1 
+2493 : a4 02 __ LDY $02 
+2495 : 60 __ __ RTS
+--------------------------------------------------------------------
+f32_to_i16:
+2496 : 20 70 21 JSR $2170 ; (freg + 36)
+2499 : a5 07 __ LDA WORK + 4 
+249b : c9 7f __ CMP #$7f
+249d : b0 07 __ BCS $24a6
+249f : a9 00 __ LDA #$00
+24a1 : 85 1b __ STA ACCU + 0 
+24a3 : 85 1c __ STA ACCU + 1 
+24a5 : 60 __ __ RTS
+24a6 : 38 __ __ SEC
+24a7 : e9 8e __ SBC #$8e
+24a9 : 90 0a __ BCC $24b5
+24ab : a9 ff __ LDA #$ff
+24ad : 85 1b __ STA ACCU + 0 
+24af : a9 7f __ LDA #$7f
+24b1 : 85 1c __ STA ACCU + 1 
+24b3 : d0 08 __ BNE $24bd
+24b5 : aa __ __ TAX
+24b6 : 46 1d __ LSR ACCU + 2 
+24b8 : 66 1c __ ROR ACCU + 1 
+24ba : e8 __ __ INX
+24bb : d0 f9 __ BNE $24b6
+24bd : 24 1e __ BIT ACCU + 3 
+24bf : 10 0e __ BPL $24cf
+24c1 : 38 __ __ SEC
+24c2 : a9 00 __ LDA #$00
+24c4 : e5 1c __ SBC ACCU + 1 
+24c6 : 85 1b __ STA ACCU + 0 
+24c8 : a9 00 __ LDA #$00
+24ca : e5 1d __ SBC ACCU + 2 
+24cc : 85 1c __ STA ACCU + 1 
+24ce : 60 __ __ RTS
+24cf : a5 1c __ LDA ACCU + 1 
+24d1 : 85 1b __ STA ACCU + 0 
+24d3 : a5 1d __ LDA ACCU + 2 
+24d5 : 85 1c __ STA ACCU + 1 
+24d7 : 60 __ __ RTS
+--------------------------------------------------------------------
+sint16_to_float:
+24d8 : 24 1c __ BIT ACCU + 1 
+24da : 30 03 __ BMI $24df
+24dc : 4c f6 24 JMP $24f6 ; (uint16_to_float + 0)
+24df : 38 __ __ SEC
+24e0 : a9 00 __ LDA #$00
+24e2 : e5 1b __ SBC ACCU + 0 
+24e4 : 85 1b __ STA ACCU + 0 
+24e6 : a9 00 __ LDA #$00
+24e8 : e5 1c __ SBC ACCU + 1 
+24ea : 85 1c __ STA ACCU + 1 
+24ec : 20 f6 24 JSR $24f6 ; (uint16_to_float + 0)
+24ef : a5 1e __ LDA ACCU + 3 
+24f1 : 09 80 __ ORA #$80
+24f3 : 85 1e __ STA ACCU + 3 
+24f5 : 60 __ __ RTS
+--------------------------------------------------------------------
+uint16_to_float:
+24f6 : a5 1b __ LDA ACCU + 0 
+24f8 : 05 1c __ ORA ACCU + 1 
+24fa : d0 05 __ BNE $2501
+24fc : 85 1d __ STA ACCU + 2 
+24fe : 85 1e __ STA ACCU + 3 
+2500 : 60 __ __ RTS
+2501 : a2 8e __ LDX #$8e
+2503 : a5 1c __ LDA ACCU + 1 
+2505 : 30 06 __ BMI $250d
+2507 : ca __ __ DEX
+2508 : 06 1b __ ASL ACCU + 0 
+250a : 2a __ __ ROL
+250b : 10 fa __ BPL $2507
+250d : 29 7f __ AND #$7f
+250f : 85 1d __ STA ACCU + 2 
+2511 : a5 1b __ LDA ACCU + 0 
+2513 : 85 1c __ STA ACCU + 1 
+2515 : 8a __ __ TXA
+2516 : 4a __ __ LSR
+2517 : 85 1e __ STA ACCU + 3 
+2519 : a9 00 __ LDA #$00
+251b : 85 1b __ STA ACCU + 0 
+251d : 6a __ __ ROR
+251e : 05 1d __ ORA ACCU + 2 
+2520 : 85 1d __ STA ACCU + 2 
+2522 : 60 __ __ RTS
+--------------------------------------------------------------------
+negaccu32:
+2523 : 38 __ __ SEC
+2524 : a9 00 __ LDA #$00
+2526 : e5 1b __ SBC ACCU + 0 
+2528 : 85 1b __ STA ACCU + 0 
+252a : a9 00 __ LDA #$00
+252c : e5 1c __ SBC ACCU + 1 
+252e : 85 1c __ STA ACCU + 1 
+2530 : a9 00 __ LDA #$00
+2532 : e5 1d __ SBC ACCU + 2 
+2534 : 85 1d __ STA ACCU + 2 
+2536 : a9 00 __ LDA #$00
+2538 : e5 1e __ SBC ACCU + 3 
+253a : 85 1e __ STA ACCU + 3 
+253c : 60 __ __ RTS
+--------------------------------------------------------------------
+divmod32:
+253d : 84 02 __ STY $02 
+253f : a0 20 __ LDY #$20
+2541 : a9 00 __ LDA #$00
+2543 : 85 07 __ STA WORK + 4 
+2545 : 85 08 __ STA WORK + 5 
+2547 : 85 09 __ STA WORK + 6 
+2549 : 85 0a __ STA WORK + 7 
+254b : a5 05 __ LDA WORK + 2 
+254d : 05 06 __ ORA WORK + 3 
+254f : d0 39 __ BNE $258a
+2551 : 18 __ __ CLC
+2552 : 26 1b __ ROL ACCU + 0 
+2554 : 26 1c __ ROL ACCU + 1 
+2556 : 26 1d __ ROL ACCU + 2 
+2558 : 26 1e __ ROL ACCU + 3 
+255a : 26 07 __ ROL WORK + 4 
+255c : 26 08 __ ROL WORK + 5 
+255e : 90 0c __ BCC $256c
+2560 : a5 07 __ LDA WORK + 4 
+2562 : e5 03 __ SBC WORK + 0 
+2564 : aa __ __ TAX
+2565 : a5 08 __ LDA WORK + 5 
+2567 : e5 04 __ SBC WORK + 1 
+2569 : 38 __ __ SEC
+256a : b0 0c __ BCS $2578
+256c : 38 __ __ SEC
+256d : a5 07 __ LDA WORK + 4 
+256f : e5 03 __ SBC WORK + 0 
+2571 : aa __ __ TAX
+2572 : a5 08 __ LDA WORK + 5 
+2574 : e5 04 __ SBC WORK + 1 
+2576 : 90 04 __ BCC $257c
+2578 : 86 07 __ STX WORK + 4 
+257a : 85 08 __ STA WORK + 5 
+257c : 88 __ __ DEY
+257d : d0 d3 __ BNE $2552
+257f : 26 1b __ ROL ACCU + 0 
+2581 : 26 1c __ ROL ACCU + 1 
+2583 : 26 1d __ ROL ACCU + 2 
+2585 : 26 1e __ ROL ACCU + 3 
+2587 : a4 02 __ LDY $02 
+2589 : 60 __ __ RTS
+258a : 18 __ __ CLC
+258b : 26 1b __ ROL ACCU + 0 
+258d : 26 1c __ ROL ACCU + 1 
+258f : 26 1d __ ROL ACCU + 2 
+2591 : 26 1e __ ROL ACCU + 3 
+2593 : 26 07 __ ROL WORK + 4 
+2595 : 26 08 __ ROL WORK + 5 
+2597 : 26 09 __ ROL WORK + 6 
+2599 : 26 0a __ ROL WORK + 7 
+259b : a5 07 __ LDA WORK + 4 
+259d : c5 03 __ CMP WORK + 0 
+259f : a5 08 __ LDA WORK + 5 
+25a1 : e5 04 __ SBC WORK + 1 
+25a3 : a5 09 __ LDA WORK + 6 
+25a5 : e5 05 __ SBC WORK + 2 
+25a7 : a5 0a __ LDA WORK + 7 
+25a9 : e5 06 __ SBC WORK + 3 
+25ab : 90 18 __ BCC $25c5
+25ad : a5 07 __ LDA WORK + 4 
+25af : e5 03 __ SBC WORK + 0 
+25b1 : 85 07 __ STA WORK + 4 
+25b3 : a5 08 __ LDA WORK + 5 
+25b5 : e5 04 __ SBC WORK + 1 
+25b7 : 85 08 __ STA WORK + 5 
+25b9 : a5 09 __ LDA WORK + 6 
+25bb : e5 05 __ SBC WORK + 2 
+25bd : 85 09 __ STA WORK + 6 
+25bf : a5 0a __ LDA WORK + 7 
+25c1 : e5 06 __ SBC WORK + 3 
+25c3 : 85 0a __ STA WORK + 7 
+25c5 : 88 __ __ DEY
+25c6 : d0 c3 __ BNE $258b
+25c8 : 26 1b __ ROL ACCU + 0 
+25ca : 26 1c __ ROL ACCU + 1 
+25cc : 26 1d __ ROL ACCU + 2 
+25ce : 26 1e __ ROL ACCU + 3 
+25d0 : a4 02 __ LDY $02 
+25d2 : 60 __ __ RTS
+--------------------------------------------------------------------
+inp_op_ext_u16:
+25d3 : a9 00 __ LDA #$00
+25d5 : 85 1d __ STA ACCU + 2 
+25d7 : 85 1e __ STA ACCU + 3 
+25d9 : 60 __ __ RTS
+--------------------------------------------------------------------
+inp_binop_div_u32:
+25da : b5 00 __ LDA $00,x 
+25dc : 85 03 __ STA WORK + 0 
+25de : b5 01 __ LDA $01,x 
+25e0 : 85 04 __ STA WORK + 1 
+25e2 : b5 02 __ LDA $02,x 
+25e4 : 85 05 __ STA WORK + 2 
+25e6 : b5 03 __ LDA WORK + 0,x 
+25e8 : 85 06 __ STA WORK + 3 
+25ea : 20 3d 25 JSR $253d ; (divmod32 + 0)
+25ed : 60 __ __ RTS
+--------------------------------------------------------------------
+inp_binop_mod_u32:
+25ee : b5 00 __ LDA $00,x 
+25f0 : 85 03 __ STA WORK + 0 
+25f2 : b5 01 __ LDA $01,x 
+25f4 : 85 04 __ STA WORK + 1 
+25f6 : b5 02 __ LDA $02,x 
+25f8 : 85 05 __ STA WORK + 2 
+25fa : b5 03 __ LDA WORK + 0,x 
+25fc : 85 06 __ STA WORK + 3 
+25fe : 20 3d 25 JSR $253d ; (divmod32 + 0)
+2601 : a5 07 __ LDA WORK + 4 
+2603 : 85 1b __ STA ACCU + 0 
+2605 : a5 08 __ LDA WORK + 5 
+2607 : 85 1c __ STA ACCU + 1 
+2609 : a5 09 __ LDA WORK + 6 
+260b : 85 1d __ STA ACCU + 2 
+260d : a5 0a __ LDA WORK + 7 
+260f : 85 1e __ STA ACCU + 3 
+2611 : 60 __ __ RTS
+--------------------------------------------------------------------
+inp_op_cmp_u32:
+2612 : b5 03 __ LDA WORK + 0,x 
+2614 : c5 1e __ CMP ACCU + 3 
+2616 : d0 20 __ BNE $2638
+2618 : b5 02 __ LDA $02,x 
+261a : c5 1d __ CMP ACCU + 2 
+261c : d0 1a __ BNE $2638
+261e : b5 01 __ LDA $01,x 
+2620 : c5 1c __ CMP ACCU + 1 
+2622 : d0 14 __ BNE $2638
+2624 : b5 00 __ LDA $00,x 
+2626 : c5 1b __ CMP ACCU + 0 
+2628 : d0 0e __ BNE $2638
+262a : a9 00 __ LDA #$00
+262c : 85 1b __ STA ACCU + 0 
+262e : 85 1c __ STA ACCU + 1 
+2630 : 60 __ __ RTS
+2631 : a9 ff __ LDA #$ff
+2633 : 85 1b __ STA ACCU + 0 
+2635 : 85 1c __ STA ACCU + 1 
+2637 : 60 __ __ RTS
+2638 : 90 f7 __ BCC $2631
+263a : a9 01 __ LDA #$01
+263c : 85 1b __ STA ACCU + 0 
+263e : a9 00 __ LDA #$00
+2640 : 85 1c __ STA ACCU + 1 
+2642 : 60 __ __ RTS
+--------------------------------------------------------------------
+inp_op_cmp_s32:
+2643 : a5 1e __ LDA ACCU + 3 
+2645 : 49 80 __ EOR #$80
+2647 : 85 1e __ STA ACCU + 3 
+2649 : b5 03 __ LDA WORK + 0,x 
+264b : 49 80 __ EOR #$80
+264d : c5 1e __ CMP ACCU + 3 
+264f : d0 20 __ BNE $2671
+2651 : b5 02 __ LDA $02,x 
+2653 : c5 1d __ CMP ACCU + 2 
+2655 : d0 1a __ BNE $2671
+2657 : b5 01 __ LDA $01,x 
+2659 : c5 1c __ CMP ACCU + 1 
+265b : d0 14 __ BNE $2671
+265d : b5 00 __ LDA $00,x 
+265f : c5 1b __ CMP ACCU + 0 
+2661 : d0 0e __ BNE $2671
+2663 : a9 00 __ LDA #$00
+2665 : 85 1b __ STA ACCU + 0 
+2667 : 85 1c __ STA ACCU + 1 
+2669 : 60 __ __ RTS
+266a : a9 ff __ LDA #$ff
+266c : 85 1b __ STA ACCU + 0 
+266e : 85 1c __ STA ACCU + 1 
+2670 : 60 __ __ RTS
+2671 : 90 f7 __ BCC $266a
+2673 : a9 01 __ LDA #$01
+2675 : 85 1b __ STA ACCU + 0 
+2677 : a9 00 __ LDA #$00
+2679 : 85 1c __ STA ACCU + 1 
+267b : 60 __ __ RTS
+--------------------------------------------------------------------
+inp_nop:
+267c : 4c 5e 08 JMP $085e ; (startup + 93)
+--------------------------------------------------------------------
+inp_const_8:
+267f : b1 19 __ LDA (IP + 0),y 
+2681 : aa __ __ TAX
+2682 : c8 __ __ INY
+2683 : b1 19 __ LDA (IP + 0),y 
+2685 : 95 00 __ STA $00,x 
+2687 : 4c 54 08 JMP $0854 ; (startup + 83)
+--------------------------------------------------------------------
+inp_const_p8:
+268a : b1 19 __ LDA (IP + 0),y 
+268c : aa __ __ TAX
+268d : c8 __ __ INY
+268e : b1 19 __ LDA (IP + 0),y 
+2690 : 95 00 __ STA $00,x 
+2692 : a9 00 __ LDA #$00
+2694 : 95 01 __ STA $01,x 
+2696 : 4c 54 08 JMP $0854 ; (startup + 83)
+--------------------------------------------------------------------
+inp_const_16:
+2699 : b1 19 __ LDA (IP + 0),y 
+269b : aa __ __ TAX
+269c : c8 __ __ INY
+269d : b1 19 __ LDA (IP + 0),y 
+269f : 95 00 __ STA $00,x 
+26a1 : c8 __ __ INY
+26a2 : b1 19 __ LDA (IP + 0),y 
+26a4 : 95 01 __ STA $01,x 
+26a6 : 4c 54 08 JMP $0854 ; (startup + 83)
+--------------------------------------------------------------------
+inp_const_32:
+26a9 : b1 19 __ LDA (IP + 0),y 
+26ab : aa __ __ TAX
+26ac : c8 __ __ INY
+26ad : b1 19 __ LDA (IP + 0),y 
+26af : 95 00 __ STA $00,x 
+26b1 : c8 __ __ INY
+26b2 : b1 19 __ LDA (IP + 0),y 
+26b4 : 95 01 __ STA $01,x 
+26b6 : c8 __ __ INY
+26b7 : b1 19 __ LDA (IP + 0),y 
+26b9 : 95 02 __ STA $02,x 
+26bb : c8 __ __ INY
+26bc : b1 19 __ LDA (IP + 0),y 
+26be : 95 03 __ STA WORK + 0,x 
+26c0 : 4c 54 08 JMP $0854 ; (startup + 83)
+--------------------------------------------------------------------
+inp_load_reg_8:
+26c3 : b1 19 __ LDA (IP + 0),y 
+26c5 : aa __ __ TAX
+26c6 : b5 00 __ LDA $00,x 
+26c8 : 85 1b __ STA ACCU + 0 
+26ca : a9 00 __ LDA #$00
+26cc : 85 1c __ STA ACCU + 1 
+26ce : 4c 54 08 JMP $0854 ; (startup + 83)
+--------------------------------------------------------------------
+inp_store_reg_8:
+26d1 : b1 19 __ LDA (IP + 0),y 
+26d3 : aa __ __ TAX
+26d4 : a5 1b __ LDA ACCU + 0 
+26d6 : 95 00 __ STA $00,x 
+26d8 : 4c 54 08 JMP $0854 ; (startup + 83)
+--------------------------------------------------------------------
+inp_load_reg_16:
+26db : b1 19 __ LDA (IP + 0),y 
+26dd : aa __ __ TAX
+26de : b5 00 __ LDA $00,x 
+26e0 : 85 1b __ STA ACCU + 0 
+26e2 : b5 01 __ LDA $01,x 
+26e4 : 85 1c __ STA ACCU + 1 
+26e6 : 4c 54 08 JMP $0854 ; (startup + 83)
+--------------------------------------------------------------------
+inp_store_reg_16:
+26e9 : b1 19 __ LDA (IP + 0),y 
+26eb : aa __ __ TAX
+26ec : a5 1b __ LDA ACCU + 0 
+26ee : 95 00 __ STA $00,x 
+26f0 : a5 1c __ LDA ACCU + 1 
+26f2 : 95 01 __ STA $01,x 
+26f4 : 4c 54 08 JMP $0854 ; (startup + 83)
+--------------------------------------------------------------------
+inp_addr_reg:
+26f7 : b1 19 __ LDA (IP + 0),y 
+26f9 : aa __ __ TAX
+26fa : b5 00 __ LDA $00,x 
+26fc : 85 1f __ STA ADDR + 0 
+26fe : b5 01 __ LDA $01,x 
+2700 : 85 20 __ STA ADDR + 1 
+2702 : 4c 54 08 JMP $0854 ; (startup + 83)
+--------------------------------------------------------------------
+inp_load_reg_32:
+2705 : b1 19 __ LDA (IP + 0),y 
+2707 : aa __ __ TAX
+2708 : b5 00 __ LDA $00,x 
+270a : 85 1b __ STA ACCU + 0 
+270c : b5 01 __ LDA $01,x 
+270e : 85 1c __ STA ACCU + 1 
+2710 : b5 02 __ LDA $02,x 
+2712 : 85 1d __ STA ACCU + 2 
+2714 : b5 03 __ LDA WORK + 0,x 
+2716 : 85 1e __ STA ACCU + 3 
+2718 : 4c 54 08 JMP $0854 ; (startup + 83)
+--------------------------------------------------------------------
+inp_store_reg_32:
+271b : b1 19 __ LDA (IP + 0),y 
+271d : aa __ __ TAX
+271e : a5 1b __ LDA ACCU + 0 
+2720 : 95 00 __ STA $00,x 
+2722 : a5 1c __ LDA ACCU + 1 
+2724 : 95 01 __ STA $01,x 
+2726 : a5 1d __ LDA ACCU + 2 
+2728 : 95 02 __ STA $02,x 
+272a : a5 1e __ LDA ACCU + 3 
+272c : 95 03 __ STA WORK + 0,x 
+272e : 4c 54 08 JMP $0854 ; (startup + 83)
+--------------------------------------------------------------------
+inp_load_abs_8:
+2731 : b1 19 __ LDA (IP + 0),y 
+2733 : 85 1f __ STA ADDR + 0 
+2735 : c8 __ __ INY
+2736 : b1 19 __ LDA (IP + 0),y 
+2738 : 85 20 __ STA ADDR + 1 
+273a : c8 __ __ INY
+273b : b1 19 __ LDA (IP + 0),y 
+273d : aa __ __ TAX
+273e : 84 02 __ STY $02 
+2740 : a0 00 __ LDY #$00
+2742 : b1 1f __ LDA (ADDR + 0),y 
+2744 : 95 00 __ STA $00,x 
+2746 : 4c 52 08 JMP $0852 ; (startup + 81)
+2749 : b1 19 __ LDA (IP + 0),y 
+274b : aa __ __ TAX
+274c : c8 __ __ INY
+274d : b1 19 __ LDA (IP + 0),y 
+274f : 84 02 __ STY $02 
+2751 : a8 __ __ TAY
+2752 : 4c 42 27 JMP $2742 ; (inp_load_abs_8 + 17)
+--------------------------------------------------------------------
+inp_load_abs_u8:
+2755 : b1 19 __ LDA (IP + 0),y 
+2757 : 85 1f __ STA ADDR + 0 
+2759 : c8 __ __ INY
+275a : b1 19 __ LDA (IP + 0),y 
+275c : 85 20 __ STA ADDR + 1 
+275e : c8 __ __ INY
+275f : b1 19 __ LDA (IP + 0),y 
+2761 : aa __ __ TAX
+2762 : 84 02 __ STY $02 
+2764 : a0 00 __ LDY #$00
+2766 : b1 1f __ LDA (ADDR + 0),y 
+2768 : 95 00 __ STA $00,x 
+276a : a9 00 __ LDA #$00
+276c : 95 01 __ STA $01,x 
+276e : 4c 52 08 JMP $0852 ; (startup + 81)
+2771 : b1 19 __ LDA (IP + 0),y 
+2773 : aa __ __ TAX
+2774 : c8 __ __ INY
+2775 : b1 19 __ LDA (IP + 0),y 
+2777 : 84 02 __ STY $02 
+2779 : a8 __ __ TAY
+277a : 4c 66 27 JMP $2766 ; (inp_load_abs_u8 + 17)
+--------------------------------------------------------------------
+inp_load_abs_16:
+277d : b1 19 __ LDA (IP + 0),y 
+277f : 85 1f __ STA ADDR + 0 
+2781 : c8 __ __ INY
+2782 : b1 19 __ LDA (IP + 0),y 
+2784 : 85 20 __ STA ADDR + 1 
+2786 : c8 __ __ INY
+2787 : b1 19 __ LDA (IP + 0),y 
+2789 : aa __ __ TAX
+278a : 84 02 __ STY $02 
+278c : a0 00 __ LDY #$00
+278e : b1 1f __ LDA (ADDR + 0),y 
+2790 : 95 00 __ STA $00,x 
+2792 : c8 __ __ INY
+2793 : b1 1f __ LDA (ADDR + 0),y 
+2795 : 95 01 __ STA $01,x 
+2797 : 4c 52 08 JMP $0852 ; (startup + 81)
+279a : b1 19 __ LDA (IP + 0),y 
+279c : aa __ __ TAX
+279d : c8 __ __ INY
+279e : b1 19 __ LDA (IP + 0),y 
+27a0 : 84 02 __ STY $02 
+27a2 : a8 __ __ TAY
+27a3 : 4c 8e 27 JMP $278e ; (inp_load_abs_16 + 17)
+--------------------------------------------------------------------
+inp_load_abs_32:
+27a6 : b1 19 __ LDA (IP + 0),y 
+27a8 : 85 1f __ STA ADDR + 0 
+27aa : c8 __ __ INY
+27ab : b1 19 __ LDA (IP + 0),y 
+27ad : 85 20 __ STA ADDR + 1 
+27af : c8 __ __ INY
+27b0 : b1 19 __ LDA (IP + 0),y 
+27b2 : aa __ __ TAX
+27b3 : 84 02 __ STY $02 
+27b5 : a0 00 __ LDY #$00
+27b7 : b1 1f __ LDA (ADDR + 0),y 
+27b9 : 95 00 __ STA $00,x 
+27bb : c8 __ __ INY
+27bc : b1 1f __ LDA (ADDR + 0),y 
+27be : 95 01 __ STA $01,x 
+27c0 : c8 __ __ INY
+27c1 : b1 1f __ LDA (ADDR + 0),y 
+27c3 : 95 02 __ STA $02,x 
+27c5 : c8 __ __ INY
+27c6 : b1 1f __ LDA (ADDR + 0),y 
+27c8 : 95 03 __ STA WORK + 0,x 
+27ca : 4c 52 08 JMP $0852 ; (startup + 81)
+27cd : b1 19 __ LDA (IP + 0),y 
+27cf : aa __ __ TAX
+27d0 : c8 __ __ INY
+27d1 : b1 19 __ LDA (IP + 0),y 
+27d3 : 84 02 __ STY $02 
+27d5 : a8 __ __ TAY
+27d6 : 4c b7 27 JMP $27b7 ; (inp_load_abs_32 + 17)
+--------------------------------------------------------------------
+inp_load_abs_addr:
+27d9 : b1 19 __ LDA (IP + 0),y 
+27db : 85 1f __ STA ADDR + 0 
+27dd : c8 __ __ INY
+27de : b1 19 __ LDA (IP + 0),y 
+27e0 : 85 20 __ STA ADDR + 1 
+27e2 : 84 02 __ STY $02 
+27e4 : a0 00 __ LDY #$00
+27e6 : b1 1f __ LDA (ADDR + 0),y 
+27e8 : aa __ __ TAX
+27e9 : c8 __ __ INY
+27ea : b1 1f __ LDA (ADDR + 0),y 
+27ec : 85 20 __ STA ADDR + 1 
+27ee : 86 1f __ STX ADDR + 0 
+27f0 : 4c 52 08 JMP $0852 ; (startup + 81)
+--------------------------------------------------------------------
+inp_store_abs_8:
+27f3 : b1 19 __ LDA (IP + 0),y 
+27f5 : 85 1f __ STA ADDR + 0 
+27f7 : c8 __ __ INY
+27f8 : b1 19 __ LDA (IP + 0),y 
+27fa : 85 20 __ STA ADDR + 1 
+27fc : c8 __ __ INY
+27fd : b1 19 __ LDA (IP + 0),y 
+27ff : aa __ __ TAX
+2800 : 84 02 __ STY $02 
+2802 : a0 00 __ LDY #$00
+2804 : b5 00 __ LDA $00,x 
+2806 : 91 1f __ STA (ADDR + 0),y 
+2808 : 4c 52 08 JMP $0852 ; (startup + 81)
+280b : b1 19 __ LDA (IP + 0),y 
+280d : aa __ __ TAX
+280e : c8 __ __ INY
+280f : b1 19 __ LDA (IP + 0),y 
+2811 : 84 02 __ STY $02 
+2813 : a8 __ __ TAY
+2814 : 4c 04 28 JMP $2804 ; (inp_store_abs_8 + 17)
+--------------------------------------------------------------------
+inp_store_abs_16:
+2817 : b1 19 __ LDA (IP + 0),y 
+2819 : 85 1f __ STA ADDR + 0 
+281b : c8 __ __ INY
+281c : b1 19 __ LDA (IP + 0),y 
+281e : 85 20 __ STA ADDR + 1 
+2820 : c8 __ __ INY
+2821 : b1 19 __ LDA (IP + 0),y 
+2823 : aa __ __ TAX
+2824 : 84 02 __ STY $02 
+2826 : a0 00 __ LDY #$00
+2828 : b5 00 __ LDA $00,x 
+282a : 91 1f __ STA (ADDR + 0),y 
+282c : c8 __ __ INY
+282d : b5 01 __ LDA $01,x 
+282f : 91 1f __ STA (ADDR + 0),y 
+2831 : 4c 52 08 JMP $0852 ; (startup + 81)
+2834 : b1 19 __ LDA (IP + 0),y 
+2836 : aa __ __ TAX
+2837 : c8 __ __ INY
+2838 : b1 19 __ LDA (IP + 0),y 
+283a : 84 02 __ STY $02 
+283c : a8 __ __ TAY
+283d : 4c 28 28 JMP $2828 ; (inp_store_abs_16 + 17)
+--------------------------------------------------------------------
+inp_store_abs_32:
+2840 : b1 19 __ LDA (IP + 0),y 
+2842 : 85 1f __ STA ADDR + 0 
+2844 : c8 __ __ INY
+2845 : b1 19 __ LDA (IP + 0),y 
+2847 : 85 20 __ STA ADDR + 1 
+2849 : c8 __ __ INY
+284a : b1 19 __ LDA (IP + 0),y 
+284c : aa __ __ TAX
+284d : 84 02 __ STY $02 
+284f : a0 00 __ LDY #$00
+2851 : b5 00 __ LDA $00,x 
+2853 : 91 1f __ STA (ADDR + 0),y 
+2855 : c8 __ __ INY
+2856 : b5 01 __ LDA $01,x 
+2858 : 91 1f __ STA (ADDR + 0),y 
+285a : c8 __ __ INY
+285b : b5 02 __ LDA $02,x 
+285d : 91 1f __ STA (ADDR + 0),y 
+285f : c8 __ __ INY
+2860 : b5 03 __ LDA WORK + 0,x 
+2862 : 91 1f __ STA (ADDR + 0),y 
+2864 : 4c 52 08 JMP $0852 ; (startup + 81)
+2867 : b1 19 __ LDA (IP + 0),y 
+2869 : aa __ __ TAX
+286a : c8 __ __ INY
+286b : b1 19 __ LDA (IP + 0),y 
+286d : 84 02 __ STY $02 
+286f : a8 __ __ TAY
+2870 : 4c 51 28 JMP $2851 ; (inp_store_abs_32 + 17)
+--------------------------------------------------------------------
+inp_lea_abs:
+2873 : b1 19 __ LDA (IP + 0),y 
+2875 : aa __ __ TAX
+2876 : c8 __ __ INY
+2877 : b1 19 __ LDA (IP + 0),y 
+2879 : 95 00 __ STA $00,x 
+287b : c8 __ __ INY
+287c : b1 19 __ LDA (IP + 0),y 
+287e : 95 01 __ STA $01,x 
+2880 : 4c 54 08 JMP $0854 ; (startup + 83)
+--------------------------------------------------------------------
+inp_lea_abs_index:
+2883 : b1 19 __ LDA (IP + 0),y 
+2885 : aa __ __ TAX
+2886 : c8 __ __ INY
+2887 : 18 __ __ CLC
+2888 : b5 00 __ LDA $00,x 
+288a : 71 19 __ ADC (IP + 0),y 
+288c : 85 1f __ STA ADDR + 0 
+288e : c8 __ __ INY
+288f : b5 01 __ LDA $01,x 
+2891 : 71 19 __ ADC (IP + 0),y 
+2893 : 85 20 __ STA ADDR + 1 
+2895 : 4c 54 08 JMP $0854 ; (startup + 83)
+--------------------------------------------------------------------
+inp_lea_abs_index_u8:
+2898 : b1 19 __ LDA (IP + 0),y 
+289a : aa __ __ TAX
+289b : c8 __ __ INY
+289c : 18 __ __ CLC
+289d : b5 00 __ LDA $00,x 
+289f : 71 19 __ ADC (IP + 0),y 
+28a1 : 85 1f __ STA ADDR + 0 
+28a3 : c8 __ __ INY
+28a4 : a9 00 __ LDA #$00
+28a6 : 71 19 __ ADC (IP + 0),y 
+28a8 : 85 20 __ STA ADDR + 1 
+28aa : 4c 54 08 JMP $0854 ; (startup + 83)
+--------------------------------------------------------------------
+inp_lea_accu_index:
+28ad : b1 19 __ LDA (IP + 0),y 
+28af : aa __ __ TAX
+28b0 : 18 __ __ CLC
+28b1 : b5 00 __ LDA $00,x 
+28b3 : 65 1b __ ADC ACCU + 0 
+28b5 : 85 1f __ STA ADDR + 0 
+28b7 : b5 01 __ LDA $01,x 
+28b9 : 65 1c __ ADC ACCU + 1 
+28bb : 85 20 __ STA ADDR + 1 
+28bd : 4c 54 08 JMP $0854 ; (startup + 83)
+--------------------------------------------------------------------
+inp_load_local_8:
+28c0 : b1 19 __ LDA (IP + 0),y 
+28c2 : aa __ __ TAX
+28c3 : c8 __ __ INY
+28c4 : b1 19 __ LDA (IP + 0),y 
+28c6 : 84 02 __ STY $02 
+28c8 : a8 __ __ TAY
+28c9 : b1 25 __ LDA (FP + 0),y 
+28cb : 95 00 __ STA $00,x 
+28cd : 4c 52 08 JMP $0852 ; (startup + 81)
+--------------------------------------------------------------------
+inp_load_local_u8:
+28d0 : b1 19 __ LDA (IP + 0),y 
+28d2 : aa __ __ TAX
+28d3 : c8 __ __ INY
+28d4 : b1 19 __ LDA (IP + 0),y 
+28d6 : 84 02 __ STY $02 
+28d8 : a8 __ __ TAY
+28d9 : b1 25 __ LDA (FP + 0),y 
+28db : 95 00 __ STA $00,x 
+28dd : a9 00 __ LDA #$00
+28df : 95 01 __ STA $01,x 
+28e1 : 4c 52 08 JMP $0852 ; (startup + 81)
+--------------------------------------------------------------------
+inp_load_local_16:
+28e4 : b1 19 __ LDA (IP + 0),y 
+28e6 : aa __ __ TAX
+28e7 : c8 __ __ INY
+28e8 : b1 19 __ LDA (IP + 0),y 
+28ea : 84 02 __ STY $02 
+28ec : a8 __ __ TAY
+28ed : b1 25 __ LDA (FP + 0),y 
+28ef : 95 00 __ STA $00,x 
+28f1 : c8 __ __ INY
+28f2 : b1 25 __ LDA (FP + 0),y 
+28f4 : 95 01 __ STA $01,x 
+28f6 : 4c 52 08 JMP $0852 ; (startup + 81)
+--------------------------------------------------------------------
+inp_load_local_32:
+28f9 : b1 19 __ LDA (IP + 0),y 
+28fb : aa __ __ TAX
+28fc : c8 __ __ INY
+28fd : b1 19 __ LDA (IP + 0),y 
+28ff : 84 02 __ STY $02 
+2901 : a8 __ __ TAY
+2902 : b1 25 __ LDA (FP + 0),y 
+2904 : 95 00 __ STA $00,x 
+2906 : c8 __ __ INY
+2907 : b1 25 __ LDA (FP + 0),y 
+2909 : 95 01 __ STA $01,x 
+290b : c8 __ __ INY
+290c : b1 25 __ LDA (FP + 0),y 
+290e : 95 02 __ STA $02,x 
+2910 : c8 __ __ INY
+2911 : b1 25 __ LDA (FP + 0),y 
+2913 : 95 03 __ STA WORK + 0,x 
+2915 : 4c 52 08 JMP $0852 ; (startup + 81)
+--------------------------------------------------------------------
+inp_store_local_16:
+2918 : b1 19 __ LDA (IP + 0),y 
+291a : aa __ __ TAX
+291b : c8 __ __ INY
+291c : b1 19 __ LDA (IP + 0),y 
+291e : 84 02 __ STY $02 
+2920 : a8 __ __ TAY
+2921 : b5 00 __ LDA $00,x 
+2923 : 91 25 __ STA (FP + 0),y 
+2925 : c8 __ __ INY
+2926 : b5 01 __ LDA $01,x 
+2928 : 91 25 __ STA (FP + 0),y 
+292a : 4c 52 08 JMP $0852 ; (startup + 81)
+--------------------------------------------------------------------
+inp_store_local_32:
+292d : b1 19 __ LDA (IP + 0),y 
+292f : aa __ __ TAX
+2930 : c8 __ __ INY
+2931 : b1 19 __ LDA (IP + 0),y 
+2933 : 84 02 __ STY $02 
+2935 : a8 __ __ TAY
+2936 : b5 00 __ LDA $00,x 
+2938 : 91 25 __ STA (FP + 0),y 
+293a : c8 __ __ INY
+293b : b5 01 __ LDA $01,x 
+293d : 91 25 __ STA (FP + 0),y 
+293f : c8 __ __ INY
+2940 : b5 02 __ LDA $02,x 
+2942 : 91 25 __ STA (FP + 0),y 
+2944 : c8 __ __ INY
+2945 : b5 03 __ LDA WORK + 0,x 
+2947 : 91 25 __ STA (FP + 0),y 
+2949 : 4c 52 08 JMP $0852 ; (startup + 81)
+--------------------------------------------------------------------
+inp_lea_local:
+294c : b1 19 __ LDA (IP + 0),y 
+294e : aa __ __ TAX
+294f : c8 __ __ INY
+2950 : 18 __ __ CLC
+2951 : b1 19 __ LDA (IP + 0),y 
+2953 : 65 25 __ ADC FP + 0 
+2955 : 95 00 __ STA $00,x 
+2957 : c8 __ __ INY
+2958 : b1 19 __ LDA (IP + 0),y 
+295a : 65 26 __ ADC FP + 1 
+295c : 95 01 __ STA $01,x 
+295e : 4c 54 08 JMP $0854 ; (startup + 83)
+--------------------------------------------------------------------
+inp_store_frame_8:
+2961 : b1 19 __ LDA (IP + 0),y 
+2963 : aa __ __ TAX
+2964 : c8 __ __ INY
+2965 : b1 19 __ LDA (IP + 0),y 
+2967 : 84 02 __ STY $02 
+2969 : a8 __ __ TAY
+296a : b5 00 __ LDA $00,x 
+296c : 91 23 __ STA (SP + 0),y 
+296e : 4c 52 08 JMP $0852 ; (startup + 81)
+--------------------------------------------------------------------
+inp_store_frame_16:
+2971 : b1 19 __ LDA (IP + 0),y 
+2973 : aa __ __ TAX
+2974 : c8 __ __ INY
+2975 : b1 19 __ LDA (IP + 0),y 
+2977 : 84 02 __ STY $02 
+2979 : a8 __ __ TAY
+297a : b5 00 __ LDA $00,x 
+297c : 91 23 __ STA (SP + 0),y 
+297e : c8 __ __ INY
+297f : b5 01 __ LDA $01,x 
+2981 : 91 23 __ STA (SP + 0),y 
+2983 : 4c 52 08 JMP $0852 ; (startup + 81)
+--------------------------------------------------------------------
+inp_store_frame_32:
+2986 : b1 19 __ LDA (IP + 0),y 
+2988 : aa __ __ TAX
+2989 : c8 __ __ INY
+298a : b1 19 __ LDA (IP + 0),y 
+298c : 84 02 __ STY $02 
+298e : a8 __ __ TAY
+298f : b5 00 __ LDA $00,x 
+2991 : 91 23 __ STA (SP + 0),y 
+2993 : c8 __ __ INY
+2994 : b5 01 __ LDA $01,x 
+2996 : 91 23 __ STA (SP + 0),y 
+2998 : c8 __ __ INY
+2999 : b5 02 __ LDA $02,x 
+299b : 91 23 __ STA (SP + 0),y 
+299d : c8 __ __ INY
+299e : b5 03 __ LDA WORK + 0,x 
+29a0 : 91 23 __ STA (SP + 0),y 
+29a2 : 4c 52 08 JMP $0852 ; (startup + 81)
+--------------------------------------------------------------------
+inp_binop_addr_16:
+29a5 : b1 19 __ LDA (IP + 0),y 
+29a7 : aa __ __ TAX
+29a8 : 18 __ __ CLC
+29a9 : a5 1b __ LDA ACCU + 0 
+29ab : 75 00 __ ADC $00,x 
+29ad : 85 1b __ STA ACCU + 0 
+29af : a5 1c __ LDA ACCU + 1 
+29b1 : 75 01 __ ADC $01,x 
+29b3 : 85 1c __ STA ACCU + 1 
+29b5 : 4c 54 08 JMP $0854 ; (startup + 83)
+--------------------------------------------------------------------
+inp_binop_subr_16:
+29b8 : b1 19 __ LDA (IP + 0),y 
+29ba : aa __ __ TAX
+29bb : 38 __ __ SEC
+29bc : a5 1b __ LDA ACCU + 0 
+29be : f5 00 __ SBC $00,x 
+29c0 : 85 1b __ STA ACCU + 0 
+29c2 : a5 1c __ LDA ACCU + 1 
+29c4 : f5 01 __ SBC $01,x 
+29c6 : 85 1c __ STA ACCU + 1 
+29c8 : 4c 54 08 JMP $0854 ; (startup + 83)
+--------------------------------------------------------------------
+inp_binop_mulr_16:
+29cb : b1 19 __ LDA (IP + 0),y 
+29cd : aa __ __ TAX
+29ce : a9 00 __ LDA #$00
+29d0 : 85 05 __ STA WORK + 2 
+29d2 : 85 06 __ STA WORK + 3 
+29d4 : b5 00 __ LDA $00,x 
+29d6 : 85 03 __ STA WORK + 0 
+29d8 : b5 01 __ LDA $01,x 
+29da : 85 04 __ STA WORK + 1 
+29dc : a2 10 __ LDX #$10
+29de : 46 04 __ LSR WORK + 1 
+29e0 : 66 03 __ ROR WORK + 0 
+29e2 : 90 0d __ BCC $29f1
+29e4 : 18 __ __ CLC
+29e5 : a5 05 __ LDA WORK + 2 
+29e7 : 65 1b __ ADC ACCU + 0 
+29e9 : 85 05 __ STA WORK + 2 
+29eb : a5 06 __ LDA WORK + 3 
+29ed : 65 1c __ ADC ACCU + 1 
+29ef : 85 06 __ STA WORK + 3 
+29f1 : 06 1b __ ASL ACCU + 0 
+29f3 : 26 1c __ ROL ACCU + 1 
+29f5 : ca __ __ DEX
+29f6 : d0 e6 __ BNE $29de
+29f8 : a5 05 __ LDA WORK + 2 
+29fa : 85 1b __ STA ACCU + 0 
+29fc : a5 06 __ LDA WORK + 3 
+29fe : 85 1c __ STA ACCU + 1 
+2a00 : 4c 54 08 JMP $0854 ; (startup + 83)
+--------------------------------------------------------------------
+inp_binop_divr_u16:
+2a03 : b1 19 __ LDA (IP + 0),y 
+2a05 : aa __ __ TAX
+2a06 : b5 00 __ LDA $00,x 
+2a08 : 85 03 __ STA WORK + 0 
+2a0a : b5 01 __ LDA $01,x 
+2a0c : 85 04 __ STA WORK + 1 
+2a0e : 20 11 24 JSR $2411 ; (divmod + 0)
+2a11 : 4c 54 08 JMP $0854 ; (startup + 83)
+--------------------------------------------------------------------
+inp_binop_modr_u16:
+2a14 : b1 19 __ LDA (IP + 0),y 
+2a16 : aa __ __ TAX
+2a17 : b5 00 __ LDA $00,x 
+2a19 : 85 03 __ STA WORK + 0 
+2a1b : b5 01 __ LDA $01,x 
+2a1d : 85 04 __ STA WORK + 1 
+2a1f : 20 11 24 JSR $2411 ; (divmod + 0)
+2a22 : a5 05 __ LDA WORK + 2 
+2a24 : 85 1b __ STA ACCU + 0 
+2a26 : a5 06 __ LDA WORK + 3 
+2a28 : 85 1c __ STA ACCU + 1 
+2a2a : 4c 54 08 JMP $0854 ; (startup + 83)
+--------------------------------------------------------------------
+inp_binop_divr_s16:
+2a2d : b1 19 __ LDA (IP + 0),y 
+2a2f : aa __ __ TAX
+2a30 : b5 00 __ LDA $00,x 
+2a32 : 85 03 __ STA WORK + 0 
+2a34 : b5 01 __ LDA $01,x 
+2a36 : 85 04 __ STA WORK + 1 
+2a38 : 24 1c __ BIT ACCU + 1 
+2a3a : 10 10 __ BPL $2a4c
+2a3c : 20 f5 23 JSR $23f5 ; (negaccu + 0)
+2a3f : 24 04 __ BIT WORK + 1 
+2a41 : 10 10 __ BPL $2a53
+2a43 : 20 03 24 JSR $2403 ; (negtmp + 0)
+2a46 : 20 11 24 JSR $2411 ; (divmod + 0)
+2a49 : 4c 54 08 JMP $0854 ; (startup + 83)
+2a4c : 24 04 __ BIT WORK + 1 
+2a4e : 10 f6 __ BPL $2a46
+2a50 : 20 03 24 JSR $2403 ; (negtmp + 0)
+2a53 : 20 11 24 JSR $2411 ; (divmod + 0)
+2a56 : 20 f5 23 JSR $23f5 ; (negaccu + 0)
+2a59 : 4c 54 08 JMP $0854 ; (startup + 83)
+--------------------------------------------------------------------
+inp_binop_modr_s16:
+2a5c : b1 19 __ LDA (IP + 0),y 
+2a5e : aa __ __ TAX
+2a5f : b5 00 __ LDA $00,x 
+2a61 : 85 03 __ STA WORK + 0 
+2a63 : b5 01 __ LDA $01,x 
+2a65 : 85 04 __ STA WORK + 1 
+2a67 : 24 1c __ BIT ACCU + 1 
+2a69 : 10 18 __ BPL $2a83
+2a6b : 20 f5 23 JSR $23f5 ; (negaccu + 0)
+2a6e : 24 04 __ BIT WORK + 1 
+2a70 : 10 18 __ BPL $2a8a
+2a72 : 20 03 24 JSR $2403 ; (negtmp + 0)
+2a75 : 20 11 24 JSR $2411 ; (divmod + 0)
+2a78 : a5 05 __ LDA WORK + 2 
+2a7a : 85 1b __ STA ACCU + 0 
+2a7c : a5 06 __ LDA WORK + 3 
+2a7e : 85 1c __ STA ACCU + 1 
+2a80 : 4c 54 08 JMP $0854 ; (startup + 83)
+2a83 : 24 04 __ BIT WORK + 1 
+2a85 : 10 ee __ BPL $2a75
+2a87 : 20 03 24 JSR $2403 ; (negtmp + 0)
+2a8a : 20 11 24 JSR $2411 ; (divmod + 0)
+2a8d : a5 05 __ LDA WORK + 2 
+2a8f : 85 1b __ STA ACCU + 0 
+2a91 : a5 06 __ LDA WORK + 3 
+2a93 : 85 1c __ STA ACCU + 1 
+2a95 : 20 f5 23 JSR $23f5 ; (negaccu + 0)
+2a98 : 4c 54 08 JMP $0854 ; (startup + 83)
+--------------------------------------------------------------------
+inp_binop_adda_16:
+2a9b : b1 19 __ LDA (IP + 0),y 
+2a9d : aa __ __ TAX
+2a9e : 18 __ __ CLC
+2a9f : b5 00 __ LDA $00,x 
+2aa1 : 65 1b __ ADC ACCU + 0 
+2aa3 : 95 00 __ STA $00,x 
+2aa5 : b5 01 __ LDA $01,x 
+2aa7 : 65 1c __ ADC ACCU + 1 
+2aa9 : 95 01 __ STA $01,x 
+2aab : 4c 54 08 JMP $0854 ; (startup + 83)
+--------------------------------------------------------------------
+inp_binop_addi_16:
+2aae : b1 19 __ LDA (IP + 0),y 
+2ab0 : c8 __ __ INY
+2ab1 : aa __ __ TAX
+2ab2 : 18 __ __ CLC
+2ab3 : b5 00 __ LDA $00,x 
+2ab5 : 71 19 __ ADC (IP + 0),y 
+2ab7 : c8 __ __ INY
+2ab8 : 95 00 __ STA $00,x 
+2aba : b5 01 __ LDA $01,x 
+2abc : 71 19 __ ADC (IP + 0),y 
+2abe : 95 01 __ STA $01,x 
+2ac0 : 4c 54 08 JMP $0854 ; (startup + 83)
+--------------------------------------------------------------------
+inp_binop_subi_16:
+2ac3 : b1 19 __ LDA (IP + 0),y 
+2ac5 : c8 __ __ INY
+2ac6 : aa __ __ TAX
+2ac7 : 38 __ __ SEC
+2ac8 : b1 19 __ LDA (IP + 0),y 
+2aca : c8 __ __ INY
+2acb : f5 00 __ SBC $00,x 
+2acd : 95 00 __ STA $00,x 
+2acf : b1 19 __ LDA (IP + 0),y 
+2ad1 : f5 01 __ SBC $01,x 
+2ad3 : 95 01 __ STA $01,x 
+2ad5 : 4c 54 08 JMP $0854 ; (startup + 83)
+--------------------------------------------------------------------
+inp_binop_andi_16:
+2ad8 : b1 19 __ LDA (IP + 0),y 
+2ada : c8 __ __ INY
+2adb : aa __ __ TAX
+2adc : b5 00 __ LDA $00,x 
+2ade : 31 19 __ AND (IP + 0),y 
+2ae0 : c8 __ __ INY
+2ae1 : 95 00 __ STA $00,x 
+2ae3 : b5 01 __ LDA $01,x 
+2ae5 : 31 19 __ AND (IP + 0),y 
+2ae7 : 95 01 __ STA $01,x 
+2ae9 : 4c 54 08 JMP $0854 ; (startup + 83)
+--------------------------------------------------------------------
+inp_binop_muli8_16:
+2aec : b1 19 __ LDA (IP + 0),y 
+2aee : c8 __ __ INY
+2aef : aa __ __ TAX
+2af0 : a9 00 __ LDA #$00
+2af2 : 85 05 __ STA WORK + 2 
+2af4 : 85 06 __ STA WORK + 3 
+2af6 : b5 00 __ LDA $00,x 
+2af8 : 85 03 __ STA WORK + 0 
+2afa : b5 01 __ LDA $01,x 
+2afc : 85 04 __ STA WORK + 1 
+2afe : b1 19 __ LDA (IP + 0),y 
+2b00 : 4a __ __ LSR
+2b01 : 85 07 __ STA WORK + 4 
+2b03 : 90 0d __ BCC $2b12
+2b05 : 18 __ __ CLC
+2b06 : a5 05 __ LDA WORK + 2 
+2b08 : 65 03 __ ADC WORK + 0 
+2b0a : 85 05 __ STA WORK + 2 
+2b0c : a5 06 __ LDA WORK + 3 
+2b0e : 65 04 __ ADC WORK + 1 
+2b10 : 85 06 __ STA WORK + 3 
+2b12 : 06 03 __ ASL WORK + 0 
+2b14 : 26 04 __ ROL WORK + 1 
+2b16 : 46 07 __ LSR WORK + 4 
+2b18 : b0 eb __ BCS $2b05
+2b1a : d0 f6 __ BNE $2b12
+2b1c : a5 05 __ LDA WORK + 2 
+2b1e : 95 00 __ STA $00,x 
+2b20 : a5 06 __ LDA WORK + 3 
+2b22 : 95 01 __ STA $01,x 
+2b24 : 4c 54 08 JMP $0854 ; (startup + 83)
+--------------------------------------------------------------------
+inp_binop_addi_8:
+2b27 : b1 19 __ LDA (IP + 0),y 
+2b29 : c8 __ __ INY
+2b2a : aa __ __ TAX
+2b2b : 18 __ __ CLC
+2b2c : b5 00 __ LDA $00,x 
+2b2e : 71 19 __ ADC (IP + 0),y 
+2b30 : 95 00 __ STA $00,x 
+2b32 : 4c 54 08 JMP $0854 ; (startup + 83)
+--------------------------------------------------------------------
+inp_binop_andi_8:
+2b35 : b1 19 __ LDA (IP + 0),y 
+2b37 : c8 __ __ INY
+2b38 : aa __ __ TAX
+2b39 : b5 00 __ LDA $00,x 
+2b3b : 31 19 __ AND (IP + 0),y 
+2b3d : 95 00 __ STA $00,x 
+2b3f : 4c 54 08 JMP $0854 ; (startup + 83)
+--------------------------------------------------------------------
+inp_binop_shl_16:
+2b42 : b1 19 __ LDA (IP + 0),y 
+2b44 : aa __ __ TAX
+2b45 : b5 00 __ LDA $00,x 
+2b47 : 2c b1 19 BIT $19b1 ; (malloc + 135)
+2b4a : 29 0f __ AND #$0f
+2b4c : f0 0b __ BEQ $2b59
+2b4e : aa __ __ TAX
+2b4f : a5 1c __ LDA ACCU + 1 
+2b51 : 06 1b __ ASL ACCU + 0 
+2b53 : 2a __ __ ROL
+2b54 : ca __ __ DEX
+2b55 : d0 fa __ BNE $2b51
+2b57 : 85 1c __ STA ACCU + 1 
+2b59 : 4c 54 08 JMP $0854 ; (startup + 83)
+--------------------------------------------------------------------
+inp_binop_shr_u16:
+2b5c : b1 19 __ LDA (IP + 0),y 
+2b5e : aa __ __ TAX
+2b5f : b5 00 __ LDA $00,x 
+2b61 : 2c b1 19 BIT $19b1 ; (malloc + 135)
+2b64 : 29 0f __ AND #$0f
+2b66 : f0 0b __ BEQ $2b73
+2b68 : aa __ __ TAX
+2b69 : a5 1c __ LDA ACCU + 1 
+2b6b : 4a __ __ LSR
+2b6c : 66 1b __ ROR ACCU + 0 
+2b6e : ca __ __ DEX
+2b6f : d0 fa __ BNE $2b6b
+2b71 : 85 1c __ STA ACCU + 1 
+2b73 : 4c 54 08 JMP $0854 ; (startup + 83)
+--------------------------------------------------------------------
+cmp16:
+2b76 : b1 19 __ LDA (IP + 0),y 
+2b78 : aa __ __ TAX
+2b79 : 38 __ __ SEC
+2b7a : b5 01 __ LDA $01,x 
+2b7c : e5 1c __ SBC ACCU + 1 
+2b7e : f0 11 __ BEQ $2b91
+2b80 : 50 02 __ BVC $2b84
+2b82 : 49 80 __ EOR #$80
+2b84 : 30 2a __ BMI $2bb0
+2b86 : 10 33 __ BPL $2bbb
+2b88 : b1 19 __ LDA (IP + 0),y 
+2b8a : aa __ __ TAX
+2b8b : b5 01 __ LDA $01,x 
+2b8d : c5 1c __ CMP ACCU + 1 
+2b8f : d0 28 __ BNE $2bb9
+2b91 : b5 00 __ LDA $00,x 
+2b93 : c5 1b __ CMP ACCU + 0 
+2b95 : d0 22 __ BNE $2bb9
+2b97 : f0 0e __ BEQ $2ba7
+2b99 : b1 19 __ LDA (IP + 0),y 
+2b9b : aa __ __ TAX
+2b9c : c8 __ __ INY
+2b9d : b1 19 __ LDA (IP + 0),y 
+2b9f : c5 1c __ CMP ACCU + 1 
+2ba1 : d0 16 __ BNE $2bb9
+2ba3 : e4 1b __ CPX ACCU + 0 
+2ba5 : d0 12 __ BNE $2bb9
+2ba7 : a9 00 __ LDA #$00
+2ba9 : 85 1b __ STA ACCU + 0 
+2bab : 85 1c __ STA ACCU + 1 
+2bad : 4c 54 08 JMP $0854 ; (startup + 83)
+2bb0 : a9 ff __ LDA #$ff
+2bb2 : 85 1b __ STA ACCU + 0 
+2bb4 : 85 1c __ STA ACCU + 1 
+2bb6 : 4c 54 08 JMP $0854 ; (startup + 83)
+2bb9 : 90 f5 __ BCC $2bb0
+2bbb : a9 01 __ LDA #$01
+2bbd : 85 1b __ STA ACCU + 0 
+2bbf : a9 00 __ LDA #$00
+2bc1 : 85 1c __ STA ACCU + 1 
+2bc3 : 4c 54 08 JMP $0854 ; (startup + 83)
+2bc6 : b1 19 __ LDA (IP + 0),y 
+2bc8 : c8 __ __ INY
+2bc9 : aa __ __ TAX
+2bca : b1 19 __ LDA (IP + 0),y 
+2bcc : 38 __ __ SEC
+2bcd : e5 1c __ SBC ACCU + 1 
+2bcf : d0 af __ BNE $2b80
+2bd1 : e4 1b __ CPX ACCU + 0 
+2bd3 : d0 e4 __ BNE $2bb9
+2bd5 : f0 d0 __ BEQ $2ba7
+2bd7 : 60 __ __ RTS
+--------------------------------------------------------------------
+cmp8:
+2bd8 : b1 19 __ LDA (IP + 0),y 
+2bda : aa __ __ TAX
+2bdb : 38 __ __ SEC
+2bdc : b5 00 __ LDA $00,x 
+2bde : e5 1b __ SBC ACCU + 0 
+2be0 : f0 19 __ BEQ $2bfb
+2be2 : 50 02 __ BVC $2be6
+2be4 : 49 80 __ EOR #$80
+2be6 : 30 1c __ BMI $2c04
+2be8 : 10 25 __ BPL $2c0f
+2bea : b1 19 __ LDA (IP + 0),y 
+2bec : aa __ __ TAX
+2bed : b5 00 __ LDA $00,x 
+2bef : c5 1b __ CMP ACCU + 0 
+2bf1 : d0 1a __ BNE $2c0d
+2bf3 : f0 06 __ BEQ $2bfb
+2bf5 : b1 19 __ LDA (IP + 0),y 
+2bf7 : c5 1b __ CMP ACCU + 0 
+2bf9 : d0 12 __ BNE $2c0d
+2bfb : a9 00 __ LDA #$00
+2bfd : 85 1b __ STA ACCU + 0 
+2bff : 85 1c __ STA ACCU + 1 
+2c01 : 4c 54 08 JMP $0854 ; (startup + 83)
+2c04 : a9 ff __ LDA #$ff
+2c06 : 85 1b __ STA ACCU + 0 
+2c08 : 85 1c __ STA ACCU + 1 
+2c0a : 4c 54 08 JMP $0854 ; (startup + 83)
+2c0d : 90 f5 __ BCC $2c04
+2c0f : a9 01 __ LDA #$01
+2c11 : 85 1b __ STA ACCU + 0 
+2c13 : a9 00 __ LDA #$00
+2c15 : 85 1c __ STA ACCU + 1 
+2c17 : 4c 54 08 JMP $0854 ; (startup + 83)
+2c1a : b1 19 __ LDA (IP + 0),y 
+2c1c : 38 __ __ SEC
+2c1d : e5 1b __ SBC ACCU + 0 
+2c1f : d0 c1 __ BNE $2be2
+2c21 : f0 d8 __ BEQ $2bfb
+2c23 : 60 __ __ RTS
+--------------------------------------------------------------------
+inp_op_negate_16:
+2c24 : 38 __ __ SEC
+2c25 : a9 00 __ LDA #$00
+2c27 : e5 1b __ SBC ACCU + 0 
+2c29 : 85 1b __ STA ACCU + 0 
+2c2b : a9 00 __ LDA #$00
+2c2d : e5 1c __ SBC ACCU + 1 
+2c2f : 85 1c __ STA ACCU + 1 
+2c31 : 4c 55 08 JMP $0855 ; (startup + 84)
+--------------------------------------------------------------------
+inp_op_invert_16:
+2c34 : a5 1b __ LDA ACCU + 0 
+2c36 : 49 ff __ EOR #$ff
+2c38 : 85 1b __ STA ACCU + 0 
+2c3a : a5 1c __ LDA ACCU + 1 
+2c3c : 49 ff __ EOR #$ff
+2c3e : 85 1c __ STA ACCU + 1 
+2c40 : 4c 55 08 JMP $0855 ; (startup + 84)
+--------------------------------------------------------------------
+inp_binop_add_f32:
+2c43 : 20 4c 21 JSR $214c ; (freg + 0)
+2c46 : 20 91 21 JSR $2191 ; (faddsub + 0)
+2c49 : 4c 55 08 JMP $0855 ; (startup + 84)
+--------------------------------------------------------------------
+inp_binop_sub_f32:
+2c4c : 20 4c 21 JSR $214c ; (freg + 0)
+2c4f : a5 06 __ LDA WORK + 3 
+2c51 : 49 80 __ EOR #$80
+2c53 : 85 06 __ STA WORK + 3 
+2c55 : 20 91 21 JSR $2191 ; (faddsub + 0)
+2c58 : 4c 55 08 JMP $0855 ; (startup + 84)
+--------------------------------------------------------------------
+inp_binop_mul_f32:
+2c5b : 20 4c 21 JSR $214c ; (freg + 0)
+2c5e : 84 02 __ STY $02 
+2c60 : 20 78 22 JSR $2278 ; (fmul + 0)
+2c63 : a4 02 __ LDY $02 
+2c65 : 4c 55 08 JMP $0855 ; (startup + 84)
+--------------------------------------------------------------------
+inp_binop_div_f32:
+2c68 : 20 4c 21 JSR $214c ; (freg + 0)
+2c6b : 20 47 23 JSR $2347 ; (fdiv + 0)
+2c6e : 4c 55 08 JMP $0855 ; (startup + 84)
+--------------------------------------------------------------------
+inp_binop_cmp_f32:
+2c71 : b1 19 __ LDA (IP + 0),y 
+2c73 : c8 __ __ INY
+2c74 : aa __ __ TAX
+2c75 : a5 1e __ LDA ACCU + 3 
+2c77 : 55 03 __ EOR WORK + 0,x 
+2c79 : 10 1e __ BPL $2c99
+2c7b : a5 1e __ LDA ACCU + 3 
+2c7d : 29 7f __ AND #$7f
+2c7f : 05 1d __ ORA ACCU + 2 
+2c81 : 05 1c __ ORA ACCU + 1 
+2c83 : 05 1b __ ORA ACCU + 0 
+2c85 : d0 0c __ BNE $2c93
+2c87 : b5 03 __ LDA WORK + 0,x 
+2c89 : 29 7f __ AND #$7f
+2c8b : 15 02 __ ORA $02,x 
+2c8d : 15 01 __ ORA $01,x 
+2c8f : 15 00 __ ORA $00,x 
+2c91 : f0 1e __ BEQ $2cb1
+2c93 : a5 1e __ LDA ACCU + 3 
+2c95 : 30 29 __ BMI $2cc0
+2c97 : 10 36 __ BPL $2ccf
+2c99 : a5 1e __ LDA ACCU + 3 
+2c9b : d5 03 __ CMP WORK + 0,x 
+2c9d : d0 1b __ BNE $2cba
+2c9f : a5 1d __ LDA ACCU + 2 
+2ca1 : d5 02 __ CMP $02,x 
+2ca3 : d0 15 __ BNE $2cba
+2ca5 : a5 1c __ LDA ACCU + 1 
+2ca7 : d5 01 __ CMP $01,x 
+2ca9 : d0 0f __ BNE $2cba
+2cab : a5 1b __ LDA ACCU + 0 
+2cad : d5 00 __ CMP $00,x 
+2caf : d0 09 __ BNE $2cba
+2cb1 : a9 00 __ LDA #$00
+2cb3 : 85 1b __ STA ACCU + 0 
+2cb5 : 85 1c __ STA ACCU + 1 
+2cb7 : 4c 55 08 JMP $0855 ; (startup + 84)
+2cba : b0 0f __ BCS $2ccb
+2cbc : 24 1e __ BIT ACCU + 3 
+2cbe : 30 0f __ BMI $2ccf
+2cc0 : a9 00 __ LDA #$00
+2cc2 : 85 1c __ STA ACCU + 1 
+2cc4 : a9 01 __ LDA #$01
+2cc6 : 85 1b __ STA ACCU + 0 
+2cc8 : 4c 55 08 JMP $0855 ; (startup + 84)
+2ccb : 24 1e __ BIT ACCU + 3 
+2ccd : 30 f1 __ BMI $2cc0
+2ccf : a9 ff __ LDA #$ff
+2cd1 : 85 1b __ STA ACCU + 0 
+2cd3 : 85 1c __ STA ACCU + 1 
+2cd5 : 4c 55 08 JMP $0855 ; (startup + 84)
+--------------------------------------------------------------------
+inp_op_negate_f32:
+2cd8 : a5 1e __ LDA ACCU + 3 
+2cda : 49 80 __ EOR #$80
+2cdc : 85 1e __ STA ACCU + 3 
+2cde : 4c 55 08 JMP $0855 ; (startup + 84)
+--------------------------------------------------------------------
+inp_conv_i16_f32:
+2ce1 : 20 d8 24 JSR $24d8 ; (sint16_to_float + 0)
+2ce4 : 4c 55 08 JMP $0855 ; (startup + 84)
+--------------------------------------------------------------------
+inp_conv_f32_i16:
+2ce7 : 20 96 24 JSR $2496 ; (f32_to_i16 + 0)
+2cea : 4c 55 08 JMP $0855 ; (startup + 84)
+--------------------------------------------------------------------
+bra:
+2ced : b1 19 __ LDA (IP + 0),y 
+2cef : 30 0c __ BMI $2cfd
+2cf1 : 38 __ __ SEC
+2cf2 : 65 19 __ ADC IP + 0 
+2cf4 : 85 19 __ STA IP + 0 
+2cf6 : 90 02 __ BCC $2cfa
+2cf8 : e6 1a __ INC IP + 1 
+2cfa : 4c 5e 08 JMP $085e ; (startup + 93)
+2cfd : 38 __ __ SEC
+2cfe : 65 19 __ ADC IP + 0 
+2d00 : 85 19 __ STA IP + 0 
+2d02 : b0 02 __ BCS $2d06
+2d04 : c6 1a __ DEC IP + 1 
+2d06 : 4c 5e 08 JMP $085e ; (startup + 93)
+2d09 : a5 1b __ LDA ACCU + 0 
+2d0b : 05 1c __ ORA ACCU + 1 
+2d0d : f0 de __ BEQ $2ced
+2d0f : 4c 54 08 JMP $0854 ; (startup + 83)
+2d12 : a5 1b __ LDA ACCU + 0 
+2d14 : 05 1c __ ORA ACCU + 1 
+2d16 : d0 d5 __ BNE $2ced
+2d18 : 4c 54 08 JMP $0854 ; (startup + 83)
+2d1b : a5 1c __ LDA ACCU + 1 
+2d1d : 30 04 __ BMI $2d23
+2d1f : 05 1b __ ORA ACCU + 0 
+2d21 : d0 ca __ BNE $2ced
+2d23 : 4c 54 08 JMP $0854 ; (startup + 83)
+2d26 : a5 1c __ LDA ACCU + 1 
+2d28 : 10 c3 __ BPL $2ced
+2d2a : 4c 54 08 JMP $0854 ; (startup + 83)
+2d2d : a5 1c __ LDA ACCU + 1 
+2d2f : 30 bc __ BMI $2ced
+2d31 : 4c 54 08 JMP $0854 ; (startup + 83)
+2d34 : a5 1c __ LDA ACCU + 1 
+2d36 : 30 b5 __ BMI $2ced
+2d38 : 05 1b __ ORA ACCU + 0 
+2d3a : f0 b1 __ BEQ $2ced
+2d3c : 4c 54 08 JMP $0854 ; (startup + 83)
+--------------------------------------------------------------------
+braf:
+2d3f : 38 __ __ SEC
+2d40 : b1 19 __ LDA (IP + 0),y 
+2d42 : 65 19 __ ADC IP + 0 
+2d44 : aa __ __ TAX
+2d45 : c8 __ __ INY
+2d46 : b1 19 __ LDA (IP + 0),y 
+2d48 : 65 1a __ ADC IP + 1 
+2d4a : 85 1a __ STA IP + 1 
+2d4c : 86 19 __ STX IP + 0 
+2d4e : 4c 5e 08 JMP $085e ; (startup + 93)
+2d51 : a5 1b __ LDA ACCU + 0 
+2d53 : 05 1c __ ORA ACCU + 1 
+2d55 : f0 e8 __ BEQ $2d3f
+2d57 : c8 __ __ INY
+2d58 : 4c 54 08 JMP $0854 ; (startup + 83)
+2d5b : a5 1b __ LDA ACCU + 0 
+2d5d : 05 1c __ ORA ACCU + 1 
+2d5f : d0 de __ BNE $2d3f
+2d61 : c8 __ __ INY
+2d62 : 4c 54 08 JMP $0854 ; (startup + 83)
+2d65 : a5 1c __ LDA ACCU + 1 
+2d67 : 30 04 __ BMI $2d6d
+2d69 : 05 1b __ ORA ACCU + 0 
+2d6b : d0 d2 __ BNE $2d3f
+2d6d : c8 __ __ INY
+2d6e : 4c 54 08 JMP $0854 ; (startup + 83)
+2d71 : a5 1c __ LDA ACCU + 1 
+2d73 : 10 ca __ BPL $2d3f
+2d75 : c8 __ __ INY
+2d76 : 4c 54 08 JMP $0854 ; (startup + 83)
+2d79 : a5 1c __ LDA ACCU + 1 
+2d7b : 30 c2 __ BMI $2d3f
+2d7d : c8 __ __ INY
+2d7e : 4c 54 08 JMP $0854 ; (startup + 83)
+2d81 : a5 1c __ LDA ACCU + 1 
+2d83 : 30 ba __ BMI $2d3f
+2d85 : 05 1b __ ORA ACCU + 0 
+2d87 : f0 b6 __ BEQ $2d3f
+2d89 : c8 __ __ INY
+2d8a : 4c 54 08 JMP $0854 ; (startup + 83)
+--------------------------------------------------------------------
+loopu8:
+2d8d : b1 19 __ LDA (IP + 0),y 
+2d8f : aa __ __ TAX
+2d90 : f6 00 __ INC $00,x 
+2d92 : c8 __ __ INY
+2d93 : b1 19 __ LDA (IP + 0),y 
+2d95 : d5 00 __ CMP $00,x 
+2d97 : 4c f9 2b JMP $2bf9 ; (cmp8 + 33)
+--------------------------------------------------------------------
+inp_jsr:
+2d9a : b1 19 __ LDA (IP + 0),y 
+2d9c : 8d b0 2d STA $2db0 ; (inp_jsr + 22)
+2d9f : c8 __ __ INY
+2da0 : b1 19 __ LDA (IP + 0),y 
+2da2 : 8d b1 2d STA $2db1 ; (inp_jsr + 23)
+2da5 : 98 __ __ TYA
+2da6 : 38 __ __ SEC
+2da7 : 65 19 __ ADC IP + 0 
+2da9 : 85 19 __ STA IP + 0 
+2dab : 90 02 __ BCC $2daf
+2dad : e6 1a __ INC IP + 1 
+2daf : 20 00 00 JSR $0000 
+2db2 : 4c 4e 08 JMP $084e ; (startup + 77)
+--------------------------------------------------------------------
+inp_native:
+2db5 : 98 __ __ TYA
+2db6 : 18 __ __ CLC
+2db7 : 65 19 __ ADC IP + 0 
+2db9 : 8d c4 2d STA $2dc4 ; (inp_native + 15)
+2dbc : a5 1a __ LDA IP + 1 
+2dbe : 69 00 __ ADC #$00
+2dc0 : 8d c5 2d STA $2dc5 ; (inp_native + 16)
+2dc3 : 20 00 00 JSR $0000 
+2dc6 : a0 00 __ LDY #$00
+2dc8 : b1 23 __ LDA (SP + 0),y 
+2dca : 85 19 __ STA IP + 0 
+2dcc : c8 __ __ INY
+2dcd : b1 23 __ LDA (SP + 0),y 
+2dcf : 85 1a __ STA IP + 1 
+2dd1 : 88 __ __ DEY
+2dd2 : 4c 55 08 JMP $0855 ; (startup + 84)
+--------------------------------------------------------------------
+inp_enter:
+2dd5 : 38 __ __ SEC
+2dd6 : a5 23 __ LDA SP + 0 
+2dd8 : f1 19 __ SBC (IP + 0),y 
+2dda : c8 __ __ INY
+2ddb : 85 23 __ STA SP + 0 
+2ddd : a5 24 __ LDA SP + 1 
+2ddf : f1 19 __ SBC (IP + 0),y 
+2de1 : c8 __ __ INY
+2de2 : 85 24 __ STA SP + 1 
+2de4 : b1 19 __ LDA (IP + 0),y 
+2de6 : 84 02 __ STY $02 
+2de8 : a8 __ __ TAY
+2de9 : a5 25 __ LDA FP + 0 
+2deb : 91 23 __ STA (SP + 0),y 
+2ded : c8 __ __ INY
+2dee : a5 26 __ LDA FP + 1 
+2df0 : 91 23 __ STA (SP + 0),y 
+2df2 : 98 __ __ TYA
+2df3 : 38 __ __ SEC
+2df4 : 65 23 __ ADC SP + 0 
+2df6 : 85 25 __ STA FP + 0 
+2df8 : a9 00 __ LDA #$00
+2dfa : 65 24 __ ADC SP + 1 
+2dfc : 85 26 __ STA FP + 1 
+2dfe : 88 __ __ DEY
+2dff : f0 08 __ BEQ $2e09
+2e01 : b9 52 00 LDA $0052,y 
+2e04 : 88 __ __ DEY
+2e05 : 91 23 __ STA (SP + 0),y 
+2e07 : d0 f8 __ BNE $2e01
+2e09 : a4 02 __ LDY $02 
+2e0b : 4c 54 08 JMP $0854 ; (startup + 83)
+--------------------------------------------------------------------
+inp_return:
+2e0e : b1 19 __ LDA (IP + 0),y 
+2e10 : c8 __ __ INY
+2e11 : 84 02 __ STY $02 
+2e13 : a8 __ __ TAY
+2e14 : b1 23 __ LDA (SP + 0),y 
+2e16 : 85 25 __ STA FP + 0 
+2e18 : c8 __ __ INY
+2e19 : b1 23 __ LDA (SP + 0),y 
+2e1b : 85 26 __ STA FP + 1 
+2e1d : 88 __ __ DEY
+2e1e : f0 09 __ BEQ $2e29
+2e20 : 88 __ __ DEY
+2e21 : b1 23 __ LDA (SP + 0),y 
+2e23 : 99 53 00 STA $0053,y 
+2e26 : 88 __ __ DEY
+2e27 : 10 f8 __ BPL $2e21
+2e29 : a4 02 __ LDY $02 
+2e2b : 18 __ __ CLC
+2e2c : b1 19 __ LDA (IP + 0),y 
+2e2e : c8 __ __ INY
+2e2f : 65 23 __ ADC SP + 0 
+2e31 : 85 23 __ STA SP + 0 
+2e33 : b1 19 __ LDA (IP + 0),y 
+2e35 : c8 __ __ INY
+2e36 : 65 24 __ ADC SP + 1 
+2e38 : 85 24 __ STA SP + 1 
+2e3a : a0 01 __ LDY #$01
+2e3c : b1 23 __ LDA (SP + 0),y 
+2e3e : 85 1a __ STA IP + 1 
+2e40 : 88 __ __ DEY
+2e41 : b1 23 __ LDA (SP + 0),y 
+2e43 : 85 19 __ STA IP + 0 
+2e45 : 4c 55 08 JMP $0855 ; (startup + 84)
+--------------------------------------------------------------------
+inp_call:
+2e48 : b1 19 __ LDA (IP + 0),y 
+2e4a : 85 1f __ STA ADDR + 0 
+2e4c : c8 __ __ INY
+2e4d : b1 19 __ LDA (IP + 0),y 
+2e4f : 85 20 __ STA ADDR + 1 
+2e51 : c8 __ __ INY
+2e52 : 98 __ __ TYA
+2e53 : a0 00 __ LDY #$00
+2e55 : 18 __ __ CLC
+2e56 : 65 19 __ ADC IP + 0 
+2e58 : 91 23 __ STA (SP + 0),y 
+2e5a : c8 __ __ INY
+2e5b : a5 1a __ LDA IP + 1 
+2e5d : 69 00 __ ADC #$00
+2e5f : 91 23 __ STA (SP + 0),y 
+2e61 : a5 1f __ LDA ADDR + 0 
+2e63 : 85 19 __ STA IP + 0 
+2e65 : a5 20 __ LDA ADDR + 1 
+2e67 : 85 1a __ STA IP + 1 
+2e69 : 4c 4e 08 JMP $084e ; (startup + 77)
+--------------------------------------------------------------------
+inp_push_frame:
+2e6c : 38 __ __ SEC
+2e6d : a5 23 __ LDA SP + 0 
+2e6f : f1 19 __ SBC (IP + 0),y 
+2e71 : c8 __ __ INY
+2e72 : 85 23 __ STA SP + 0 
+2e74 : a5 24 __ LDA SP + 1 
+2e76 : f1 19 __ SBC (IP + 0),y 
+2e78 : 85 24 __ STA SP + 1 
+2e7a : 4c 54 08 JMP $0854 ; (startup + 83)
+--------------------------------------------------------------------
+inp_pop_frame:
+2e7d : 18 __ __ CLC
+2e7e : b1 19 __ LDA (IP + 0),y 
+2e80 : c8 __ __ INY
+2e81 : 65 23 __ ADC SP + 0 
+2e83 : 85 23 __ STA SP + 0 
+2e85 : b1 19 __ LDA (IP + 0),y 
+2e87 : 65 24 __ ADC SP + 1 
+2e89 : 85 24 __ STA SP + 1 
+2e8b : 4c 54 08 JMP $0854 ; (startup + 83)
+--------------------------------------------------------------------
+inp_strcpy:
+2e8e : 84 02 __ STY $02 
+2e90 : a0 ff __ LDY #$ff
+2e92 : c8 __ __ INY
+2e93 : b1 1b __ LDA (ACCU + 0),y 
+2e95 : 91 1f __ STA (ADDR + 0),y 
+2e97 : d0 f9 __ BNE $2e92
+2e99 : a4 02 __ LDY $02 
+2e9b : 4c 55 08 JMP $0855 ; (startup + 84)
+--------------------------------------------------------------------
+inp_op_extrt:
+2e9e : b1 19 __ LDA (IP + 0),y 
+2ea0 : c8 __ __ INY
+2ea1 : 8d af 2e STA $2eaf ; (inp_op_extrt + 17)
+2ea4 : b1 19 __ LDA (IP + 0),y 
+2ea6 : c8 __ __ INY
+2ea7 : 8d b0 2e STA $2eb0 ; (inp_op_extrt + 18)
+2eaa : b1 19 __ LDA (IP + 0),y 
+2eac : c8 __ __ INY
+2ead : aa __ __ TAX
+2eae : 20 00 00 JSR $0000 
+2eb1 : 4c 55 08 JMP $0855 ; (startup + 84)
